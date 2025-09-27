@@ -14,6 +14,165 @@ export type Database = {
   }
   public: {
     Tables: {
+      bookings: {
+        Row: {
+          booking_date: string
+          created_at: string
+          customer_id: string
+          customer_name: string
+          customer_phone: string
+          end_time: string
+          field_id: string
+          id: string
+          start_time: string
+          status: string | null
+          total_amount: number
+          updated_at: string
+        }
+        Insert: {
+          booking_date: string
+          created_at?: string
+          customer_id: string
+          customer_name: string
+          customer_phone: string
+          end_time: string
+          field_id: string
+          id?: string
+          start_time: string
+          status?: string | null
+          total_amount: number
+          updated_at?: string
+        }
+        Update: {
+          booking_date?: string
+          created_at?: string
+          customer_id?: string
+          customer_name?: string
+          customer_phone?: string
+          end_time?: string
+          field_id?: string
+          id?: string
+          start_time?: string
+          status?: string | null
+          total_amount?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_field_id_fkey"
+            columns: ["field_id"]
+            isOneToOne: false
+            referencedRelation: "fields"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      field_amenities: {
+        Row: {
+          amenity: string
+          created_at: string
+          field_id: string
+          id: string
+        }
+        Insert: {
+          amenity: string
+          created_at?: string
+          field_id: string
+          id?: string
+        }
+        Update: {
+          amenity?: string
+          created_at?: string
+          field_id?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "field_amenities_field_id_fkey"
+            columns: ["field_id"]
+            isOneToOne: false
+            referencedRelation: "fields"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      field_images: {
+        Row: {
+          created_at: string
+          field_id: string
+          id: string
+          image_url: string
+          is_primary: boolean | null
+        }
+        Insert: {
+          created_at?: string
+          field_id: string
+          id?: string
+          image_url: string
+          is_primary?: boolean | null
+        }
+        Update: {
+          created_at?: string
+          field_id?: string
+          id?: string
+          image_url?: string
+          is_primary?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "field_images_field_id_fkey"
+            columns: ["field_id"]
+            isOneToOne: false
+            referencedRelation: "fields"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fields: {
+        Row: {
+          address: string | null
+          created_at: string
+          description: string | null
+          id: string
+          location: string
+          name: string
+          operating_hours: string | null
+          owner_id: string
+          price_per_hour: number
+          rating: number | null
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          location: string
+          name: string
+          operating_hours?: string | null
+          owner_id: string
+          price_per_hour: number
+          rating?: number | null
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          location?: string
+          name?: string
+          operating_hours?: string | null
+          owner_id?: string
+          price_per_hour?: number
+          rating?: number | null
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string

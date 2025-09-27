@@ -2,45 +2,69 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import { MapPin, Clock, Star, Users, Wifi, Car, Bath, Coffee } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { useField } from "@/hooks/useFields";
 
-// Mock data - in real app this would come from Supabase
-const mockFieldDetails = {
-  "1": {
-    id: "1",
-    name: "Premier Stadium Field",
-    location: "Downtown Sports Complex, New York",
-    fullAddress: "123 Sports Ave, Downtown, New York, NY 10001",
-    pricePerHour: 120,
-    images: [
-      "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200&h=800&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=1200&h=800&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=1200&h=800&fit=crop&crop=center"
-    ],
-    rating: 4.9,
-    reviews: 127,
-    description: "A premium football field with professional-grade artificial turf, floodlights, and modern amenities. Perfect for competitive matches, training sessions, and tournaments. The field meets FIFA standards and offers excellent playing conditions year-round.",
-    amenities: [
-      { name: "WiFi", icon: Wifi },
-      { name: "Parking", icon: Car },
-      { name: "Changing Rooms", icon: Bath },
-      { name: "Refreshments", icon: Coffee }
-    ],
-    capacity: 22,
-    openHours: "6:00 AM - 11:00 PM",
-    fieldType: "11v11 Full Size",
-    surface: "Artificial Turf"
-  }
+// Amenity icons mapping
+const amenityIcons = {
+  "WiFi": Wifi,
+  "Parking": Car,
+  "Changing Rooms": Bath,
+  "Refreshments": Coffee,
+  "Floodlights": Clock,
+  "Equipment": Users,
 };
 
 const FieldDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   
-  const field = mockFieldDetails[id as keyof typeof mockFieldDetails];
+  const { data: field, isLoading, error } = useField(id || "");
 
-  if (!field) {
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background">
+        {/* Header */}
+        <header className="bg-white border-b shadow-sm sticky top-0 z-50">
+          <div className="max-w-7xl mx-auto px-6 py-4">
+            <div className="flex items-center justify-between">
+              <Button 
+                variant="ghost" 
+                onClick={() => navigate("/customer")}
+                className="text-primary hover:text-primary-glow"
+              >
+                ← Back to Browse
+              </Button>
+              <h1 className="text-xl font-bold text-primary">FieldBook</h1>
+            </div>
+          </div>
+        </header>
+        
+        <div className="max-w-7xl mx-auto px-6 py-8">
+          <div className="grid lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 space-y-8">
+              <Skeleton className="h-96 w-full rounded-2xl" />
+              <div className="space-y-4">
+                <Skeleton className="h-8 w-3/4" />
+                <Skeleton className="h-4 w-1/2" />
+                <div className="flex gap-2">
+                  <Skeleton className="h-6 w-20" />
+                  <Skeleton className="h-6 w-24" />
+                </div>
+              </div>
+            </div>
+            <div className="lg:col-span-1">
+              <Skeleton className="h-96 w-full rounded-lg" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !field) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
@@ -81,25 +105,27 @@ const FieldDetails = () => {
             <div className="space-y-4">
               <div className="relative rounded-2xl overflow-hidden">
                 <img 
-                  src={field.images[0]} 
+                  src={field.images?.find(img => img.is_primary)?.image_url || field.images?.[0]?.image_url || "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200&h=800&fit=crop&crop=center"} 
                   alt={field.name}
                   className="w-full h-96 object-cover"
                 />
                 <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-2 rounded-lg">
-                  <span className="text-sm font-medium">1 / {field.images.length}</span>
+                  <span className="text-sm font-medium">1 / {field.images?.length || 1}</span>
                 </div>
               </div>
               
-              <div className="grid grid-cols-2 gap-4">
-                {field.images.slice(1).map((image, index) => (
-                  <img 
-                    key={index}
-                    src={image} 
-                    alt={`${field.name} view ${index + 2}`}
-                    className="w-full h-32 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
-                  />
-                ))}
-              </div>
+              {field.images && field.images.length > 1 && (
+                <div className="grid grid-cols-2 gap-4">
+                  {field.images.filter((_, index) => index > 0).map((image, index) => (
+                    <img 
+                      key={image.id}
+                      src={image.image_url} 
+                      alt={`${field.name} view ${index + 2}`}
+                      className="w-full h-32 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
+                    />
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Field Info */}
@@ -110,41 +136,48 @@ const FieldDetails = () => {
                   <div className="flex items-center gap-2">
                     <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                     <span className="font-semibold">{field.rating}</span>
-                    <span className="text-muted-foreground">({field.reviews} reviews)</span>
+                    <span className="text-muted-foreground">(0 reviews)</span>
                   </div>
                 </div>
                 
                 <div className="flex items-center text-muted-foreground mb-4">
                   <MapPin className="w-5 h-5 mr-2" />
-                  {field.fullAddress}
+                  {field.address || field.location}
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                  <Badge variant="secondary">{field.fieldType}</Badge>
-                  <Badge variant="secondary">{field.surface}</Badge>
+                  <Badge variant="secondary">Football Field</Badge>
+                  <Badge variant="secondary">Professional Grade</Badge>
                   <Badge variant="secondary">
                     <Users className="w-3 h-3 mr-1" />
-                    Up to {field.capacity} players
+                    Up to 22 players
                   </Badge>
                 </div>
               </div>
 
-              <div>
-                <h3 className="text-xl font-semibold mb-3">Description</h3>
-                <p className="text-muted-foreground leading-relaxed">{field.description}</p>
-              </div>
-
-              <div>
-                <h3 className="text-xl font-semibold mb-4">Amenities</h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {field.amenities.map((amenity) => (
-                    <div key={amenity.name} className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg">
-                      <amenity.icon className="w-5 h-5 text-primary" />
-                      <span className="text-sm font-medium">{amenity.name}</span>
-                    </div>
-                  ))}
+              {field.description && (
+                <div>
+                  <h3 className="text-xl font-semibold mb-3">Description</h3>
+                  <p className="text-muted-foreground leading-relaxed">{field.description}</p>
                 </div>
-              </div>
+              )}
+
+              {field.amenities && field.amenities.length > 0 && (
+                <div>
+                  <h3 className="text-xl font-semibold mb-4">Amenities</h3>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {field.amenities.map((amenity) => {
+                      const IconComponent = amenityIcons[amenity.amenity as keyof typeof amenityIcons] || Users;
+                      return (
+                        <div key={amenity.id} className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg">
+                          <IconComponent className="w-5 h-5 text-primary" />
+                          <span className="text-sm font-medium">{amenity.amenity}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -154,12 +187,12 @@ const FieldDetails = () => {
               <div className="space-y-6">
                 <div className="text-center border-b pb-4">
                   <div className="text-3xl font-bold text-primary mb-2">
-                    ${field.pricePerHour}
+                    ${field.price_per_hour}
                     <span className="text-lg font-normal text-muted-foreground">/hour</span>
                   </div>
                   <div className="flex items-center justify-center text-sm text-muted-foreground">
                     <Clock className="w-4 h-4 mr-1" />
-                    {field.openHours}
+                    {field.operating_hours}
                   </div>
                 </div>
 

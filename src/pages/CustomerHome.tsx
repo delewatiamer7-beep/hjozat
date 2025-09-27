@@ -3,66 +3,18 @@ import { useNavigate } from "react-router-dom";
 import { FieldCard } from "@/components/FieldCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Search, MapPin, Filter } from "lucide-react";
-
-// Mock data - in real app this would come from Supabase
-const mockFields = [
-  {
-    id: "1",
-    name: "Premier Stadium Field",
-    location: "Downtown Sports Complex, New York",
-    pricePerHour: 120,
-    image: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&h=600&fit=crop&crop=center",
-    rating: 4.9
-  },
-  {
-    id: "2", 
-    name: "Green Valley Field",
-    location: "Green Valley Park, Los Angeles",
-    pricePerHour: 85,
-    image: "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=800&h=600&fit=crop&crop=center",
-    rating: 4.7
-  },
-  {
-    id: "3",
-    name: "Elite Training Ground",
-    location: "Sports Academy, Chicago",
-    pricePerHour: 150,
-    image: "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=800&h=600&fit=crop&crop=center",
-    rating: 4.8
-  },
-  {
-    id: "4",
-    name: "Community Sports Field",
-    location: "Central Park, Miami",
-    pricePerHour: 60,
-    image: "https://images.unsplash.com/photo-1543351659-6c3e0ec2e3c8?w=800&h=600&fit=crop&crop=center",
-    rating: 4.5
-  },
-  {
-    id: "5",
-    name: "Professional Arena",
-    location: "Metro Sports Center, Boston",
-    pricePerHour: 200,
-    image: "https://images.unsplash.com/photo-1552667466-07770ae110d0?w=800&h=600&fit=crop&crop=center",
-    rating: 4.9
-  },
-  {
-    id: "6",
-    name: "Riverside Field",
-    location: "Riverside Park, Seattle",
-    pricePerHour: 75,
-    image: "https://images.unsplash.com/photo-1489944440615-453fc2b6f9a2?w=800&h=600&fit=crop&crop=center",
-    rating: 4.6
-  }
-];
+import { useFields } from "@/hooks/useFields";
 
 const CustomerHome = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [locationFilter, setLocationFilter] = useState("");
+  
+  const { data: fields = [], isLoading, error } = useFields();
 
-  const filteredFields = mockFields.filter(field => {
+  const filteredFields = fields.filter(field => {
     const matchesSearch = field.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesLocation = locationFilter ? field.location.toLowerCase().includes(locationFilter.toLowerCase()) : true;
     return matchesSearch && matchesLocation;
@@ -151,19 +103,43 @@ const CustomerHome = () => {
             </div>
           </div>
           
-          {filteredFields.length > 0 ? (
+          {isLoading ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {Array(6).fill(0).map((_, i) => (
+                <div key={i} className="space-y-4">
+                  <Skeleton className="h-48 w-full rounded-lg" />
+                  <Skeleton className="h-4 w-3/4" />
+                  <Skeleton className="h-4 w-1/2" />
+                </div>
+              ))}
+            </div>
+          ) : error ? (
+            <div className="text-center py-16">
+              <p className="text-xl text-muted-foreground mb-4">Failed to load fields</p>
+              <Button onClick={() => window.location.reload()} variant="outline">
+                Retry
+              </Button>
+            </div>
+          ) : filteredFields.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredFields.map((field) => (
                 <FieldCard
                   key={field.id}
-                  {...field}
+                  id={field.id}
+                  name={field.name}
+                  location={field.location}
+                  pricePerHour={field.price_per_hour}
+                  image={field.images?.find(img => img.is_primary)?.image_url || field.images?.[0]?.image_url || "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&h=600&fit=crop&crop=center"}
+                  rating={field.rating}
                   onViewDetails={handleViewDetails}
                 />
               ))}
             </div>
           ) : (
             <div className="text-center py-16">
-              <p className="text-xl text-muted-foreground mb-4">No fields found matching your criteria</p>
+              <p className="text-xl text-muted-foreground mb-4">
+                {fields.length === 0 ? "No fields available yet" : "No fields found matching your criteria"}
+              </p>
               <Button 
                 onClick={() => {
                   setSearchTerm("");

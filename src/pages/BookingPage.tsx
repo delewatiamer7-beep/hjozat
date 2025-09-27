@@ -8,11 +8,15 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Calendar } from "@/components/ui/calendar";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { CalendarIcon, MapPin, Clock, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
+import { useField } from "@/hooks/useFields";
+import { useCreateBooking } from "@/hooks/useBookings";
+import { useAuth } from "@/contexts/AuthContext";
 
 const bookingSchema = z.object({
   customerName: z.string().trim().min(1, "Customer name is required").max(100, "Name must be less than 100 characters"),
@@ -22,16 +26,6 @@ const bookingSchema = z.object({
 });
 
 type BookingFormData = z.infer<typeof bookingSchema>;
-
-// Mock field data
-const mockField = {
-  id: "1",
-  name: "Premier Stadium Field",
-  location: "Downtown Sports Complex, New York",
-  pricePerHour: 120,
-  image: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600&h=400&fit=crop&crop=center",
-  rating: 4.9
-};
 
 // Available time slots
 const timeSlots = [
@@ -43,9 +37,12 @@ const timeSlots = [
 const BookingPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [selectedTime, setSelectedTime] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const { data: field, isLoading, error } = useField(id || "");
+  const createBooking = useCreateBooking();
 
   const {
     register,
@@ -58,11 +55,23 @@ const BookingPage = () => {
   });
 
   const onSubmit = async (data: BookingFormData) => {
-    setIsSubmitting(true);
+    if (!field || !user) return;
     
     try {
-      // Simulate API call - in real app this would go to Supabase
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const endTime = new Date(`1970-01-01T${data.time}:00`);
+      endTime.setHours(endTime.getHours() + 1); // 1-hour booking
+      
+      await createBooking.mutateAsync({
+        field_id: field.id,
+        customer_id: user.id,
+        customer_name: data.customerName,
+        customer_phone: data.phone,
+        booking_date: format(data.date, 'yyyy-MM-dd'),
+        start_time: data.time,
+        end_time: endTime.toTimeString().slice(0, 5),
+        total_amount: field.price_per_hour,
+        status: 'pending',
+      });
       
       toast({
         title: "Booking Submitted!",
@@ -76,8 +85,6 @@ const BookingPage = () => {
         description: "There was an error submitting your booking. Please try again.",
         variant: "destructive"
       });
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -92,6 +99,58 @@ const BookingPage = () => {
     setSelectedTime(time);
     setValue("time", time);
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <header className="bg-white border-b shadow-sm sticky top-0 z-50">
+          <div className="max-w-7xl mx-auto px-6 py-4">
+            <div className="flex items-center justify-between">
+              <Button 
+                variant="ghost" 
+                onClick={() => navigate("/customer")}
+                className="text-primary hover:text-primary-glow"
+              >
+                ← Back to Browse
+              </Button>
+              <h1 className="text-xl font-bold text-primary">Book Your Field</h1>
+            </div>
+          </div>
+        </header>
+        <div className="max-w-4xl mx-auto px-6 py-8">
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="md:col-span-1">
+              <Card className="sticky top-24 p-6">
+                <Skeleton className="h-40 w-full rounded-lg mb-4" />
+                <Skeleton className="h-6 w-3/4 mb-2" />
+                <Skeleton className="h-4 w-1/2" />
+              </Card>
+            </div>
+            <div className="md:col-span-2">
+              <Card className="p-8">
+                <Skeleton className="h-8 w-1/2 mb-6" />
+                <div className="space-y-4">
+                  <Skeleton className="h-10 w-full" />
+                  <Skeleton className="h-10 w-full" />
+                </div>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !field) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-4">Field not found</h2>
+          <Button onClick={() => navigate("/customer")}>Back to Browse</Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -118,28 +177,28 @@ const BookingPage = () => {
             <Card className="sticky top-24">
               <div className="p-6">
                 <img 
-                  src={mockField.image} 
-                  alt={mockField.name}
+                  src={field.images?.find(img => img.is_primary)?.image_url || field.images?.[0]?.image_url || "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600&h=400&fit=crop&crop=center"} 
+                  alt={field.name}
                   className="w-full h-40 object-cover rounded-lg mb-4"
                 />
                 
-                <h3 className="text-xl font-bold mb-2">{mockField.name}</h3>
+                <h3 className="text-xl font-bold mb-2">{field.name}</h3>
                 
                 <div className="space-y-2 text-sm">
                   <div className="flex items-center text-muted-foreground">
                     <MapPin className="w-4 h-4 mr-2" />
-                    {mockField.location}
+                    {field.location}
                   </div>
                   
                   <div className="flex items-center">
                     <Star className="w-4 h-4 mr-2 fill-yellow-400 text-yellow-400" />
-                    <span className="font-medium">{mockField.rating}</span>
+                    <span className="font-medium">{field.rating}</span>
                   </div>
                 </div>
 
                 <div className="mt-4 pt-4 border-t">
                   <div className="text-2xl font-bold text-primary">
-                    ${mockField.pricePerHour}
+                    ${field.price_per_hour}
                     <span className="text-sm font-normal text-muted-foreground">/hour</span>
                   </div>
                 </div>
@@ -158,7 +217,7 @@ const BookingPage = () => {
                       </div>
                       <div className="flex justify-between font-semibold pt-2 border-t">
                         <span>Total:</span>
-                        <span>${mockField.pricePerHour}</span>
+                        <span>${field.price_per_hour}</span>
                       </div>
                     </div>
                   </div>
@@ -278,10 +337,10 @@ const BookingPage = () => {
                   <Button 
                     type="submit" 
                     size="lg"
-                    disabled={isSubmitting}
+                    disabled={createBooking.isPending}
                     className="w-full bg-primary hover:bg-primary-glow text-primary-foreground font-semibold"
                   >
-                    {isSubmitting ? (
+                    {createBooking.isPending ? (
                       <>
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
                         Submitting Booking...
