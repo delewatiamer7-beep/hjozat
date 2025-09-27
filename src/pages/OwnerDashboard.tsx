@@ -9,31 +9,33 @@ import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { useOwnerFields } from "@/hooks/useFields";
 import { useOwnerBookings } from "@/hooks/useBookings";
+import { AddFieldDialog } from "@/components/AddFieldDialog";
+import { useUpdateField, useDeleteField } from "@/hooks/useFieldMutations";
 
 const OwnerDashboard = () => {
   const { user } = useAuth();
   const { data: fields = [], isLoading: fieldsLoading } = useOwnerFields(user?.id || "");
   const { data: bookings = [], isLoading: bookingsLoading } = useOwnerBookings(user?.id || "");
+  const [showAddDialog, setShowAddDialog] = useState(false);
+  
+  const updateField = useUpdateField();
+  const deleteField = useDeleteField();
 
   const handleAddField = () => {
-    toast({
-      title: "Add New Field",
-      description: "This feature requires backend integration with Supabase.",
-    });
+    setShowAddDialog(true);
   };
 
   const handleEditField = (fieldId: string) => {
     toast({
       title: "Edit Field",
-      description: "This feature requires backend integration with Supabase.",
+      description: "Edit functionality coming soon!",
     });
   };
 
   const handleDeleteField = (fieldId: string) => {
-    toast({
-      title: "Delete Field",
-      description: "This feature requires backend integration with Supabase.",
-    });
+    if (confirm("Are you sure you want to delete this field? This action cannot be undone.")) {
+      deleteField.mutate(fieldId);
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -313,6 +315,11 @@ const OwnerDashboard = () => {
           </TabsContent>
         </Tabs>
       </div>
+      
+      <AddFieldDialog 
+        open={showAddDialog} 
+        onOpenChange={setShowAddDialog} 
+      />
     </div>
   );
 };
