@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -24,14 +24,36 @@ const AuthPage = () => {
   const defaultTab = searchParams.get('tab') || 'login';
   
   const [isLoading, setIsLoading] = useState(false);
+  const [justLoggedIn, setJustLoggedIn] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [role, setRole] = useState<'customer' | 'owner' | 'admin'>(defaultRole);
   
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, user, profile } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  // Handle redirect after successful login
+  useEffect(() => {
+    if (justLoggedIn && user && profile) {
+      // Redirect based on user role
+      switch (profile.role) {
+        case 'customer':
+          navigate('/customer');
+          break;
+        case 'owner':
+          navigate('/owner/dashboard');
+          break;
+        case 'admin':
+          navigate('/admin/dashboard');
+          break;
+        default:
+          navigate('/');
+      }
+      setJustLoggedIn(false);
+    }
+  }, [justLoggedIn, user, profile, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,8 +78,8 @@ const AuthPage = () => {
         description: 'You have been logged in successfully.',
       });
 
-      // Redirect based on role will be handled by useEffect in App.tsx
-      navigate('/');
+      // Set flag to trigger redirect in useEffect
+      setJustLoggedIn(true);
     } catch (error) {
       if (error instanceof z.ZodError) {
         toast({
