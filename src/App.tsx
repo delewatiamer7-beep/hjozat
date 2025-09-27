@@ -25,7 +25,14 @@ const App = () => (
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/auth" element={<AuthPage />} />
-            <Route path="/customer" element={<CustomerHome />} />
+            <Route 
+              path="/customer" 
+              element={
+                <ProtectedRoute requiredRole="customer">
+                  <CustomerHome />
+                </ProtectedRoute>
+              } 
+            />
             <Route path="/field/:id" element={<FieldDetails />} />
             <Route path="/book/:id" element={<BookingPage />} />
             <Route 
