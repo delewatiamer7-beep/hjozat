@@ -116,6 +116,9 @@ const AuthPage = () => {
         description: 'Please check your email to verify your account.',
       });
 
+      // Set flag to trigger redirect when user gets signed in after email verification
+      setJustLoggedIn(true);
+
       // Switch to login tab
       const url = new URL(window.location.href);
       url.searchParams.set('tab', 'login');
