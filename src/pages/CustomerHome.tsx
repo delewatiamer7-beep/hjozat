@@ -128,7 +128,7 @@ const CustomerHome = () => {
                   id={field.id}
                   name={field.name}
                   location={field.location}
-                  pricePerHour={field.price_per_hour}
+                  pricePerBooking={field.price_per_booking}
                   image={field.images?.find(img => img.is_primary)?.image_url || field.images?.[0]?.image_url || "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&h=600&fit=crop&crop=center"}
                   rating={field.rating}
                   onViewDetails={handleViewDetails}

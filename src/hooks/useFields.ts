@@ -7,7 +7,7 @@ export interface Field {
   location: string;
   address?: string;
   description?: string;
-  price_per_hour: number;
+  price_per_booking: number;
   rating: number;
   status: string;
   operating_hours: string;

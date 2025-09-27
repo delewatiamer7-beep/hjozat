@@ -187,8 +187,8 @@ const FieldDetails = () => {
               <div className="space-y-6">
                 <div className="text-center border-b pb-4">
                   <div className="text-3xl font-bold text-primary mb-2">
-                    ${field.price_per_hour}
-                    <span className="text-lg font-normal text-muted-foreground">/hour</span>
+                    ${field.price_per_booking}
+                    <span className="text-lg font-normal text-muted-foreground">/booking</span>
                   </div>
                   <div className="flex items-center justify-center text-sm text-muted-foreground">
                     <Clock className="w-4 h-4 mr-1" />

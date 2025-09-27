@@ -14,7 +14,7 @@ const addFieldSchema = z.object({
   location: z.string().min(1, 'Location is required').max(100, 'Location must be less than 100 characters'),
   address: z.string().max(200, 'Address must be less than 200 characters').optional(),
   description: z.string().max(500, 'Description must be less than 500 characters').optional(),
-  price_per_hour: z.number().min(0.01, 'Price must be greater than 0').max(10000, 'Price must be reasonable'),
+  price_per_booking: z.number().min(0.01, 'Price must be greater than 0').max(10000, 'Price must be reasonable'),
   operating_hours: z.string().max(50, 'Operating hours must be less than 50 characters').optional(),
 });
 
@@ -35,7 +35,7 @@ export function AddFieldDialog({ open, onOpenChange }: AddFieldDialogProps) {
       location: '',
       address: '',
       description: '',
-      price_per_hour: 0,
+      price_per_booking: 0,
       operating_hours: '6:00 AM - 10:00 PM',
     },
   });
@@ -44,7 +44,7 @@ export function AddFieldDialog({ open, onOpenChange }: AddFieldDialogProps) {
     await createField.mutateAsync({
       name: data.name,
       location: data.location,
-      price_per_hour: data.price_per_hour,
+      price_per_booking: data.price_per_booking,
       address: data.address || undefined,
       description: data.description || undefined,
       operating_hours: data.operating_hours || undefined,
@@ -127,10 +127,10 @@ export function AddFieldDialog({ open, onOpenChange }: AddFieldDialogProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
-                name="price_per_hour"
+                name="price_per_booking"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Price per Hour ($) *</FormLabel>
+                    <FormLabel>Price per Booking ($) *</FormLabel>
                     <FormControl>
                       <Input 
                         type="number"

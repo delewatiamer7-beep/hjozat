@@ -7,7 +7,7 @@ interface CreateFieldData {
   location: string;
   address?: string;
   description?: string;
-  price_per_hour: number;
+  price_per_booking: number;
   operating_hours?: string;
 }
 
@@ -17,7 +17,7 @@ interface UpdateFieldData {
   location?: string;
   address?: string;
   description?: string;
-  price_per_hour?: number;
+  price_per_booking?: number;
   operating_hours?: string;
   status?: string;
 }

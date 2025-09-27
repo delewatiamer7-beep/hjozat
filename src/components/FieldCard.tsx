@@ -6,7 +6,7 @@ interface FieldCardProps {
   id: string;
   name: string;
   location: string;
-  pricePerHour: number;
+  pricePerBooking: number;
   image: string;
   rating?: number;
   onViewDetails: (id: string) => void;
@@ -16,7 +16,7 @@ export const FieldCard = ({
   id, 
   name, 
   location, 
-  pricePerHour, 
+  pricePerBooking, 
   image, 
   rating = 4.8,
   onViewDetails 
@@ -30,7 +30,7 @@ export const FieldCard = ({
           className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
         />
         <div className="absolute top-4 right-4 bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
-          ${pricePerHour}/hr
+          ${pricePerBooking}/booking
         </div>
         {rating && (
           <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-foreground px-2 py-1 rounded-full text-sm font-medium flex items-center gap-1">

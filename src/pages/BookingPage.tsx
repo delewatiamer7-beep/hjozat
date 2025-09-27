@@ -69,7 +69,7 @@ const BookingPage = () => {
         booking_date: format(data.date, 'yyyy-MM-dd'),
         start_time: data.time,
         end_time: endTime.toTimeString().slice(0, 5),
-        total_amount: field.price_per_hour,
+        total_amount: field.price_per_booking,
         status: 'pending',
       });
       
@@ -198,8 +198,8 @@ const BookingPage = () => {
 
                 <div className="mt-4 pt-4 border-t">
                   <div className="text-2xl font-bold text-primary">
-                    ${field.price_per_hour}
-                    <span className="text-sm font-normal text-muted-foreground">/hour</span>
+                    ${field.price_per_booking}
+                    <span className="text-sm font-normal text-muted-foreground">/booking</span>
                   </div>
                 </div>
 
@@ -217,7 +217,7 @@ const BookingPage = () => {
                       </div>
                       <div className="flex justify-between font-semibold pt-2 border-t">
                         <span>Total:</span>
-                        <span>${field.price_per_hour}</span>
+                        <span>${field.price_per_booking}</span>
                       </div>
                     </div>
                   </div>

@@ -138,7 +138,7 @@ export type Database = {
           name: string
           operating_hours: string | null
           owner_id: string
-          price_per_hour: number
+          price_per_booking: number
           rating: number | null
           status: string | null
           updated_at: string
@@ -152,7 +152,7 @@ export type Database = {
           name: string
           operating_hours?: string | null
           owner_id: string
-          price_per_hour: number
+          price_per_booking: number
           rating?: number | null
           status?: string | null
           updated_at?: string
@@ -166,7 +166,7 @@ export type Database = {
           name?: string
           operating_hours?: string | null
           owner_id?: string
-          price_per_hour?: number
+          price_per_booking?: number
           rating?: number | null
           status?: string | null
           updated_at?: string

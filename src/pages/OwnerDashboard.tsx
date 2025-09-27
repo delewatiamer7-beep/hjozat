@@ -187,7 +187,7 @@ const OwnerDashboard = () => {
                           {field.location}
                         </div>
                         <div className="text-2xl font-bold text-primary">
-                          ${field.price_per_hour}<span className="text-sm font-normal">/hr</span>
+                          ${field.price_per_booking}<span className="text-sm font-normal">/booking</span>
                         </div>
                       </div>
                       
