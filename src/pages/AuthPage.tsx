@@ -15,12 +15,12 @@ const authSchema = z.object({
   email: z.string().email('Invalid email address'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
   name: z.string().min(2, 'Name must be at least 2 characters').optional(),
-  role: z.enum(['customer', 'owner', 'admin']).optional(),
+  role: z.enum(['customer', 'owner']).optional(),
 });
 
 const AuthPage = () => {
   const [searchParams] = useSearchParams();
-  const defaultRole = searchParams.get('role') as 'customer' | 'owner' | 'admin' || 'customer';
+  const defaultRole = searchParams.get('role') as 'customer' | 'owner' || 'customer';
   const defaultTab = searchParams.get('tab') || 'login';
   
   const [isLoading, setIsLoading] = useState(false);
@@ -28,7 +28,7 @@ const AuthPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-  const [role, setRole] = useState<'customer' | 'owner' | 'admin'>(defaultRole);
+  const [role, setRole] = useState<'customer' | 'owner'>(defaultRole);
   
   const { signIn, signUp, user, profile } = useAuth();
   const { toast } = useToast();
@@ -245,7 +245,7 @@ const AuthPage = () => {
 
               <div className="space-y-2">
                 <Label htmlFor="role">Account Type</Label>
-                <Select value={role} onValueChange={(value: 'customer' | 'owner' | 'admin') => setRole(value)}>
+                <Select value={role} onValueChange={(value: 'customer' | 'owner') => setRole(value)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select your role" />
                   </SelectTrigger>
@@ -260,12 +260,6 @@ const AuthPage = () => {
                       <div className="flex items-center gap-2">
                         {getRoleIcon('owner')}
                         Field Owner - Manage your fields
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="admin">
-                      <div className="flex items-center gap-2">
-                        {getRoleIcon('admin')}
-                        Administrator - System management
                       </div>
                     </SelectItem>
                   </SelectContent>

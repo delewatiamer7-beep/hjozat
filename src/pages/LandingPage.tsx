@@ -16,9 +16,6 @@ const LandingPage = () => {
       case "owner":
         navigate(`/auth?role=owner&tab=login`);
         break;
-      case "admin":
-        navigate(`/auth?role=admin&tab=login`);
-        break;
     }
   };
 
@@ -121,7 +118,7 @@ const LandingPage = () => {
             />
           </div>
           
-          <div className="text-center mt-12 space-y-4">
+          <div className="text-center mt-12">
             <p className="text-sm text-muted-foreground">
               Already have an account?{" "}
               <button 
@@ -129,15 +126,6 @@ const LandingPage = () => {
                 className="text-primary hover:text-primary-glow underline font-medium transition-colors"
               >
                 Sign in here
-              </button>
-            </p>
-            <p className="text-sm text-muted-foreground">
-              Are you an administrator?{" "}
-              <button 
-                onClick={() => handleRoleSelection("admin")}
-                className="text-primary hover:text-primary-glow underline font-medium transition-colors"
-              >
-                Access admin panel
               </button>
             </p>
           </div>
