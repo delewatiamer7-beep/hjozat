@@ -19,10 +19,10 @@ import { useCreateBooking } from "@/hooks/useBookings";
 import { useAuth } from "@/contexts/AuthContext";
 
 const bookingSchema = z.object({
-  customerName: z.string().trim().min(1, "Customer name is required").max(100, "Name must be less than 100 characters"),
-  phone: z.string().trim().min(10, "Valid phone number is required").max(20, "Phone number must be less than 20 characters"),
-  date: z.date({ required_error: "Please select a date" }),
-  time: z.string().min(1, "Please select a time"),
+  customerName: z.string().trim().min(1, "اسم العميل مطلوب").max(100, "يجب أن يكون الاسم أقل من 100 حرف"),
+  phone: z.string().trim().min(10, "رقم هاتف صحيح مطلوب").max(20, "يجب أن يكون رقم الهاتف أقل من 20 رقم"),
+  date: z.date({ required_error: "يرجى اختيار التاريخ" }),
+  time: z.string().min(1, "يرجى اختيار الوقت"),
 });
 
 type BookingFormData = z.infer<typeof bookingSchema>;
@@ -74,15 +74,15 @@ const BookingPage = () => {
       });
       
       toast({
-        title: "Booking Submitted!",
-        description: "Your booking request has been sent to the field owner. You'll receive a confirmation soon.",
+        title: "تم إرسال الحجز!",
+        description: "تم إرسال طلب الحجز إلى مالك الملعب. ستتلقى تأكيداً قريباً.",
       });
       
       navigate("/customer");
     } catch (error) {
       toast({
-        title: "Booking Failed",
-        description: "There was an error submitting your booking. Please try again.",
+        title: "فشل الحجز",
+        description: "حدث خطأ أثناء إرسال حجزك. يرجى المحاولة مرة أخرى.",
         variant: "destructive"
       });
     }
@@ -111,9 +111,9 @@ const BookingPage = () => {
                 onClick={() => navigate("/customer")}
                 className="text-primary hover:text-primary-glow"
               >
-                ← Back to Browse
+                → العودة للتصفح
               </Button>
-              <h1 className="text-xl font-bold text-primary">Book Your Field</h1>
+              <h1 className="text-xl font-bold text-primary">احجز ملعبك</h1>
             </div>
           </div>
         </header>
@@ -145,8 +145,8 @@ const BookingPage = () => {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">Field not found</h2>
-          <Button onClick={() => navigate("/customer")}>Back to Browse</Button>
+          <h2 className="text-2xl font-bold mb-4">الملعب غير موجود</h2>
+          <Button onClick={() => navigate("/customer")}>العودة للتصفح</Button>
         </div>
       </div>
     );
@@ -163,9 +163,9 @@ const BookingPage = () => {
               onClick={() => navigate(`/field/${id}`)}
               className="text-primary hover:text-primary-glow"
             >
-              ← Back to Field Details
+              → العودة لتفاصيل الملعب
             </Button>
-            <h1 className="text-xl font-bold text-primary">Book Your Field</h1>
+            <h1 className="text-xl font-bold text-primary">احجز ملعبك</h1>
           </div>
         </div>
       </header>
@@ -186,12 +186,12 @@ const BookingPage = () => {
                 
                 <div className="space-y-2 text-sm">
                   <div className="flex items-center text-muted-foreground">
-                    <MapPin className="w-4 h-4 mr-2" />
+                    <MapPin className="w-4 h-4 ml-2" />
                     {field.location}
                   </div>
                   
                   <div className="flex items-center">
-                    <Star className="w-4 h-4 mr-2 fill-yellow-400 text-yellow-400" />
+                    <Star className="w-4 h-4 ml-2 fill-yellow-400 text-yellow-400" />
                     <span className="font-medium">{field.rating}</span>
                   </div>
                 </div>
@@ -199,24 +199,24 @@ const BookingPage = () => {
                 <div className="mt-4 pt-4 border-t">
                   <div className="text-2xl font-bold text-primary">
                     ${field.price_per_booking}
-                    <span className="text-sm font-normal text-muted-foreground">/booking</span>
+                    <span className="text-sm font-normal text-muted-foreground">/حجز</span>
                   </div>
                 </div>
 
                 {selectedDate && selectedTime && (
                   <div className="mt-4 pt-4 border-t">
-                    <h4 className="font-semibold mb-2">Booking Summary</h4>
+                    <h4 className="font-semibold mb-2">ملخص الحجز</h4>
                     <div className="space-y-1 text-sm">
                       <div className="flex justify-between">
-                        <span>Date:</span>
+                        <span>التاريخ:</span>
                         <span>{format(selectedDate, "PPP")}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span>Time:</span>
+                        <span>الوقت:</span>
                         <span>{selectedTime}</span>
                       </div>
                       <div className="flex justify-between font-semibold pt-2 border-t">
-                        <span>Total:</span>
+                        <span>الإجمالي:</span>
                         <span>${field.price_per_booking}</span>
                       </div>
                     </div>
@@ -230,22 +230,22 @@ const BookingPage = () => {
           <div className="md:col-span-2">
             <Card className="p-8">
               <div className="mb-8">
-                <h2 className="text-3xl font-bold mb-2">Complete Your Booking</h2>
-                <p className="text-muted-foreground">Fill in your details to reserve this field</p>
+                <h2 className="text-3xl font-bold mb-2">أكمل حجزك</h2>
+                <p className="text-muted-foreground">املأ بياناتك لحجز هذا الملعب</p>
               </div>
 
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 {/* Customer Information */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold">Contact Information</h3>
+                  <h3 className="text-lg font-semibold">معلومات الاتصال</h3>
                   
                   <div>
-                    <Label htmlFor="customerName">Full Name *</Label>
+                    <Label htmlFor="customerName">الاسم الكامل *</Label>
                     <Input
                       id="customerName"
                       {...register("customerName")}
-                      className={cn(errors.customerName && "border-destructive")}
-                      placeholder="Enter your full name"
+                      className={cn(errors.customerName && "border-destructive", "text-right")}
+                      placeholder="أدخل اسمك الكامل"
                     />
                     {errors.customerName && (
                       <p className="text-sm text-destructive mt-1">{errors.customerName.message}</p>
@@ -253,12 +253,12 @@ const BookingPage = () => {
                   </div>
 
                   <div>
-                    <Label htmlFor="phone">Phone Number *</Label>
+                    <Label htmlFor="phone">رقم الهاتف *</Label>
                     <Input
                       id="phone"
                       {...register("phone")}
-                      className={cn(errors.phone && "border-destructive")}
-                      placeholder="Enter your phone number"
+                      className={cn(errors.phone && "border-destructive", "text-right")}
+                      placeholder="أدخل رقم هاتفك"
                       type="tel"
                     />
                     {errors.phone && (
@@ -269,24 +269,24 @@ const BookingPage = () => {
 
                 {/* Date & Time Selection */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold">Select Date & Time</h3>
+                  <h3 className="text-lg font-semibold">اختر التاريخ والوقت</h3>
                   
                   <div className="grid md:grid-cols-2 gap-4">
                     {/* Date Picker */}
                     <div>
-                      <Label>Date *</Label>
+                      <Label>التاريخ *</Label>
                       <Popover>
                         <PopoverTrigger asChild>
                           <Button
                             variant="outline"
                             className={cn(
-                              "w-full justify-start text-left font-normal",
+                              "w-full justify-start text-right font-normal",
                               !selectedDate && "text-muted-foreground",
                               errors.date && "border-destructive"
                             )}
                           >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {selectedDate ? format(selectedDate, "PPP") : "Select date"}
+                            <CalendarIcon className="ml-2 h-4 w-4" />
+                            {selectedDate ? format(selectedDate, "PPP") : "اختر التاريخ"}
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0" align="start">
@@ -307,7 +307,7 @@ const BookingPage = () => {
 
                     {/* Time Selection */}
                     <div>
-                      <Label>Time *</Label>
+                      <Label>الوقت *</Label>
                       <div className="grid grid-cols-3 gap-2 mt-2 max-h-40 overflow-y-auto border rounded-lg p-2">
                         {timeSlots.map((time) => (
                           <Button
@@ -342,16 +342,16 @@ const BookingPage = () => {
                   >
                     {createBooking.isPending ? (
                       <>
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                        Submitting Booking...
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white ml-2" />
+                        جاري إرسال الحجز...
                       </>
                     ) : (
-                      "Confirm Booking"
+                      "تأكيد الحجز"
                     )}
                   </Button>
                   
                   <p className="text-sm text-muted-foreground text-center mt-4">
-                    Your booking will be pending until confirmed by the field owner
+                    سيكون حجزك قيد الانتظار حتى يتم تأكيده من قبل مالك الملعب
                   </p>
                 </div>
               </form>

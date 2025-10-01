@@ -27,13 +27,13 @@ const OwnerDashboard = () => {
 
   const handleEditField = (fieldId: string) => {
     toast({
-      title: "Edit Field",
-      description: "Edit functionality coming soon!",
+      title: "تعديل الملعب",
+      description: "وظيفة التعديل قريباً!",
     });
   };
 
   const handleDeleteField = (fieldId: string) => {
-    if (confirm("Are you sure you want to delete this field? This action cannot be undone.")) {
+    if (confirm("هل أنت متأكد من حذف هذا الملعب؟ لا يمكن التراجع عن هذا الإجراء.")) {
       deleteField.mutate(fieldId);
     }
   };
@@ -58,15 +58,15 @@ const OwnerDashboard = () => {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-primary">Owner Dashboard</h1>
-              <p className="text-muted-foreground">Manage your fields and bookings</p>
+              <h1 className="text-2xl font-bold text-primary">لوحة تحكم المالك</h1>
+              <p className="text-muted-foreground">أدر ملاعبك وحجوزاتك</p>
             </div>
             <Button 
               onClick={handleAddField}
               className="bg-primary hover:bg-primary-glow text-primary-foreground"
             >
-              <Plus className="w-4 h-4 mr-2" />
-              Add New Field
+              <Plus className="w-4 h-4 ml-2" />
+              إضافة ملعب جديد
             </Button>
           </div>
         </div>
@@ -78,7 +78,7 @@ const OwnerDashboard = () => {
           <Card className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Total Fields</p>
+                <p className="text-sm font-medium text-muted-foreground">إجمالي الملاعب</p>
                 <p className="text-3xl font-bold text-primary">{fields.length}</p>
               </div>
               <MapPin className="w-8 h-8 text-primary/60" />
@@ -88,7 +88,7 @@ const OwnerDashboard = () => {
           <Card className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Total Bookings</p>
+                <p className="text-sm font-medium text-muted-foreground">إجمالي الحجوزات</p>
                 <p className="text-3xl font-bold text-primary">{bookings.length}</p>
               </div>
               <Calendar className="w-8 h-8 text-primary/60" />
@@ -98,7 +98,7 @@ const OwnerDashboard = () => {
           <Card className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Pending</p>
+                <p className="text-sm font-medium text-muted-foreground">قيد الانتظار</p>
                 <p className="text-3xl font-bold text-yellow-600">
                   {bookings.filter(b => b.status === "Pending").length}
                 </p>
@@ -110,7 +110,7 @@ const OwnerDashboard = () => {
           <Card className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Revenue</p>
+                <p className="text-sm font-medium text-muted-foreground">الإيرادات</p>
                 <p className="text-3xl font-bold text-green-600">
                   ${bookings.filter(b => b.status === "confirmed").reduce((sum, b) => sum + b.total_amount, 0)}
                 </p>
@@ -123,21 +123,21 @@ const OwnerDashboard = () => {
         {/* Tabs */}
         <Tabs defaultValue="fields" className="space-y-6">
           <TabsList className="grid w-full grid-cols-2 max-w-md">
-            <TabsTrigger value="fields">My Fields</TabsTrigger>
-            <TabsTrigger value="bookings">Bookings</TabsTrigger>
+            <TabsTrigger value="fields">ملاعبي</TabsTrigger>
+            <TabsTrigger value="bookings">الحجوزات</TabsTrigger>
           </TabsList>
 
           {/* Fields Tab */}
           <TabsContent value="fields" className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold">My Fields</h2>
+              <h2 className="text-2xl font-bold">ملاعبي</h2>
               <Button 
                 onClick={handleAddField}
                 variant="outline"
                 className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
               >
-                <Plus className="w-4 h-4 mr-2" />
-                Add Field
+                <Plus className="w-4 h-4 ml-2" />
+                إضافة ملعب
               </Button>
             </div>
 
@@ -157,11 +157,11 @@ const OwnerDashboard = () => {
             ) : fields.length === 0 ? (
               <div className="text-center py-16">
                 <MapPin className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2">No fields added yet</h3>
-                <p className="text-muted-foreground mb-6">Start by adding your first field to begin receiving bookings</p>
+                <h3 className="text-xl font-semibold mb-2">لم تتم إضافة ملاعب بعد</h3>
+                <p className="text-muted-foreground mb-6">ابدأ بإضافة ملعبك الأول لتلقي الحجوزات</p>
                 <Button onClick={handleAddField} className="bg-primary hover:bg-primary-glow">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Your First Field
+                  <Plus className="w-4 h-4 ml-2" />
+                  أضف ملعبك الأول
                 </Button>
               </div>
             ) : (
@@ -174,7 +174,7 @@ const OwnerDashboard = () => {
                         alt={field.name}
                         className="w-full h-48 object-cover"
                       />
-                      <Badge className="absolute top-4 right-4 bg-green-100 text-green-800">
+                      <Badge className="absolute top-4 left-4 bg-green-100 text-green-800">
                         {field.status}
                       </Badge>
                     </div>
@@ -183,16 +183,16 @@ const OwnerDashboard = () => {
                       <div>
                         <h3 className="text-xl font-bold mb-2">{field.name}</h3>
                         <div className="flex items-center text-muted-foreground text-sm mb-2">
-                          <MapPin className="w-4 h-4 mr-1" />
+                          <MapPin className="w-4 h-4 ml-1" />
                           {field.location}
                         </div>
                         <div className="text-2xl font-bold text-primary">
-                          ${field.price_per_booking}<span className="text-sm font-normal">/booking</span>
+                          ${field.price_per_booking}<span className="text-sm font-normal">/حجز</span>
                         </div>
                       </div>
                       
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">0 bookings</span>
+                        <span className="text-muted-foreground">0 حجوزات</span>
                         <span className="font-medium">★ {field.rating}</span>
                       </div>
                       
@@ -203,8 +203,8 @@ const OwnerDashboard = () => {
                           className="flex-1"
                           onClick={() => handleEditField(field.id)}
                         >
-                          <Edit className="w-3 h-3 mr-1" />
-                          Edit
+                          <Edit className="w-3 h-3 ml-1" />
+                          تعديل
                         </Button>
                         <Button 
                           size="sm" 
@@ -212,8 +212,8 @@ const OwnerDashboard = () => {
                           className="flex-1"
                           onClick={() => handleDeleteField(field.id)}
                         >
-                          <Trash2 className="w-3 h-3 mr-1" />
-                          Delete
+                          <Trash2 className="w-3 h-3 ml-1" />
+                          حذف
                         </Button>
                       </div>
                     </div>
@@ -226,11 +226,11 @@ const OwnerDashboard = () => {
           {/* Bookings Tab */}
           <TabsContent value="bookings" className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold">Recent Bookings</h2>
+              <h2 className="text-2xl font-bold">الحجوزات الأخيرة</h2>
               <div className="flex gap-2">
-                <Badge variant="secondary">All: {bookings.length}</Badge>
+                <Badge variant="secondary">الكل: {bookings.length}</Badge>
                 <Badge className="bg-yellow-100 text-yellow-800">
-                  Pending: {bookings.filter(b => b.status === "Pending").length}
+                  قيد الانتظار: {bookings.filter(b => b.status === "Pending").length}
                 </Badge>
               </div>
             </div>
@@ -252,21 +252,21 @@ const OwnerDashboard = () => {
             ) : bookings.length === 0 ? (
               <div className="text-center py-16">
                 <Calendar className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2">No bookings yet</h3>
-                <p className="text-muted-foreground">Once customers start booking your fields, you'll see them here</p>
+                <h3 className="text-xl font-semibold mb-2">لا توجد حجوزات بعد</h3>
+                <p className="text-muted-foreground">عندما يبدأ العملاء بحجز ملاعبك، ستراها هنا</p>
               </div>
             ) : (
               <Card>
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead className="border-b">
-                      <tr className="text-left">
-                        <th className="p-4 font-semibold">Field</th>
-                        <th className="p-4 font-semibold">Customer</th>
-                        <th className="p-4 font-semibold">Date & Time</th>
-                        <th className="p-4 font-semibold">Status</th>
-                        <th className="p-4 font-semibold">Amount</th>
-                        <th className="p-4 font-semibold">Actions</th>
+                      <tr className="text-right">
+                        <th className="p-4 font-semibold">الملعب</th>
+                        <th className="p-4 font-semibold">العميل</th>
+                        <th className="p-4 font-semibold">التاريخ والوقت</th>
+                        <th className="p-4 font-semibold">الحالة</th>
+                        <th className="p-4 font-semibold">المبلغ</th>
+                        <th className="p-4 font-semibold">الإجراءات</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -300,7 +300,7 @@ const OwnerDashboard = () => {
                               </Button>
                               {booking.status === "pending" && (
                                 <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white">
-                                  Confirm
+                                  تأكيد
                                 </Button>
                               )}
                             </div>

@@ -10,12 +10,12 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { useCreateField } from '@/hooks/useFieldMutations';
 
 const addFieldSchema = z.object({
-  name: z.string().min(1, 'Field name is required').max(100, 'Name must be less than 100 characters'),
-  location: z.string().min(1, 'Location is required').max(100, 'Location must be less than 100 characters'),
-  address: z.string().max(200, 'Address must be less than 200 characters').optional(),
-  description: z.string().max(500, 'Description must be less than 500 characters').optional(),
-  price_per_booking: z.number().min(0.01, 'Price must be greater than 0').max(10000, 'Price must be reasonable'),
-  operating_hours: z.string().max(50, 'Operating hours must be less than 50 characters').optional(),
+  name: z.string().min(1, 'اسم الملعب مطلوب').max(100, 'يجب أن يكون الاسم أقل من 100 حرف'),
+  location: z.string().min(1, 'الموقع مطلوب').max(100, 'يجب أن يكون الموقع أقل من 100 حرف'),
+  address: z.string().max(200, 'يجب أن يكون العنوان أقل من 200 حرف').optional(),
+  description: z.string().max(500, 'يجب أن يكون الوصف أقل من 500 حرف').optional(),
+  price_per_booking: z.number().min(0.01, 'يجب أن يكون السعر أكبر من 0').max(10000, 'يجب أن يكون السعر معقولاً'),
+  operating_hours: z.string().max(50, 'يجب أن تكون ساعات العمل أقل من 50 حرف').optional(),
 });
 
 type AddFieldFormData = z.infer<typeof addFieldSchema>;
@@ -36,7 +36,7 @@ export function AddFieldDialog({ open, onOpenChange }: AddFieldDialogProps) {
       address: '',
       description: '',
       price_per_booking: 0,
-      operating_hours: '6:00 AM - 10:00 PM',
+      operating_hours: '6:00 صباحاً - 10:00 مساءً',
     },
   });
 
@@ -57,7 +57,7 @@ export function AddFieldDialog({ open, onOpenChange }: AddFieldDialogProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Add New Field</DialogTitle>
+          <DialogTitle>إضافة ملعب جديد</DialogTitle>
         </DialogHeader>
         
         <Form {...form}>
@@ -68,9 +68,9 @@ export function AddFieldDialog({ open, onOpenChange }: AddFieldDialogProps) {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Field Name *</FormLabel>
+                    <FormLabel>اسم الملعب *</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., Soccer Field A" {...field} />
+                      <Input placeholder="مثال: ملعب كرة القدم أ" {...field} className="text-right" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -82,9 +82,9 @@ export function AddFieldDialog({ open, onOpenChange }: AddFieldDialogProps) {
                 name="location"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Location *</FormLabel>
+                    <FormLabel>الموقع *</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., Downtown Sports Center" {...field} />
+                      <Input placeholder="مثال: المركز الرياضي وسط المدينة" {...field} className="text-right" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -97,9 +97,9 @@ export function AddFieldDialog({ open, onOpenChange }: AddFieldDialogProps) {
               name="address"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Address</FormLabel>
+                  <FormLabel>العنوان</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., 123 Sports Lane, City, State" {...field} />
+                    <Input placeholder="مثال: 123 شارع الرياضة، المدينة، المحافظة" {...field} className="text-right" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -111,11 +111,11 @@ export function AddFieldDialog({ open, onOpenChange }: AddFieldDialogProps) {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>الوصف</FormLabel>
                   <FormControl>
                     <Textarea 
-                      placeholder="Describe your field, facilities, and any special features..."
-                      className="min-h-[100px]"
+                      placeholder="صف ملعبك، المرافق، وأي ميزات خاصة..."
+                      className="min-h-[100px] text-right"
                       {...field} 
                     />
                   </FormControl>
@@ -130,7 +130,7 @@ export function AddFieldDialog({ open, onOpenChange }: AddFieldDialogProps) {
                 name="price_per_booking"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Price per Booking ($) *</FormLabel>
+                    <FormLabel>السعر لكل حجز ($) *</FormLabel>
                     <FormControl>
                       <Input 
                         type="number"
@@ -139,6 +139,7 @@ export function AddFieldDialog({ open, onOpenChange }: AddFieldDialogProps) {
                         placeholder="50.00"
                         {...field}
                         onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                        className="text-right"
                       />
                     </FormControl>
                     <FormMessage />
@@ -151,9 +152,9 @@ export function AddFieldDialog({ open, onOpenChange }: AddFieldDialogProps) {
                 name="operating_hours"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Operating Hours</FormLabel>
+                    <FormLabel>ساعات العمل</FormLabel>
                     <FormControl>
-                      <Input placeholder="6:00 AM - 10:00 PM" {...field} />
+                      <Input placeholder="6:00 صباحاً - 10:00 مساءً" {...field} className="text-right" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -169,14 +170,14 @@ export function AddFieldDialog({ open, onOpenChange }: AddFieldDialogProps) {
                 className="flex-1"
                 disabled={createField.isPending}
               >
-                Cancel
+                إلغاء
               </Button>
               <Button 
                 type="submit" 
                 className="flex-1"
                 disabled={createField.isPending}
               >
-                {createField.isPending ? "Creating..." : "Create Field"}
+                {createField.isPending ? "جاري الإنشاء..." : "إنشاء ملعب"}
               </Button>
             </div>
           </form>

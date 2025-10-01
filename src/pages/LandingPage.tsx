@@ -26,8 +26,8 @@ const LandingPage = () => {
         <nav className="absolute top-0 left-0 right-0 z-20 p-6">
           <div className="max-w-6xl mx-auto flex justify-between items-center">
             <div className="text-white">
-              <span className="font-semibold">Welcome, {profile?.name}</span>
-              <span className="ml-2 text-sm opacity-75">({profile?.role})</span>
+              <span className="font-semibold">مرحباً، {profile?.name}</span>
+              <span className="mr-2 text-sm opacity-75">({profile?.role})</span>
             </div>
             <div className="flex gap-4">
               <Button
@@ -47,14 +47,14 @@ const LandingPage = () => {
                 }}
                 className="text-white hover:text-primary-glow"
               >
-                Go to Dashboard
+                الذهاب إلى لوحة التحكم
               </Button>
               <Button
                 variant="ghost"
                 onClick={signOut}
                 className="text-white hover:text-primary-glow"
               >
-                Sign Out
+                تسجيل الخروج
               </Button>
             </div>
           </div>
@@ -72,13 +72,13 @@ const LandingPage = () => {
         
         <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-6">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-            Book Your Perfect
+            احجز ملعبك المثالي
             <span className="block bg-hero-gradient bg-clip-text text-transparent">
-              Football Field
+              لكرة القدم
             </span>
           </h1>
           <p className="text-xl md:text-2xl mb-12 text-white/90 max-w-2xl mx-auto leading-relaxed">
-            Connect with premium football fields in your area. Easy booking, professional facilities, unforgettable matches.
+            تواصل مع أفضل ملاعب كرة القدم في منطقتك. حجز سهل، مرافق احترافية، مباريات لا تُنسى.
           </p>
         </div>
         
@@ -95,37 +95,37 @@ const LandingPage = () => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              Choose Your Role
+              اختر دورك
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Select how you'd like to use our platform and get started with your football field booking experience.
+              اختر كيف تريد استخدام منصتنا وابدأ تجربتك في حجز ملاعب كرة القدم.
             </p>
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <RoleSelectionCard
               role="customer"
-              title="Customer"
-              description="Browse and book football fields in your area. Find the perfect venue for your next match or training session."
+              title="عميل"
+              description="تصفح واحجز ملاعب كرة القدم في منطقتك. اعثر على المكان المثالي لمباراتك أو جلسة تدريبك القادمة."
               onClick={() => handleRoleSelection("customer")}
             />
             
             <RoleSelectionCard
               role="owner"
-              title="Field Owner"
-              description="List your football facilities and manage bookings. Grow your business with our professional platform."
+              title="مالك ملعب"
+              description="أدرج مرافقك الرياضية وأدر الحجوزات. نمِّ أعمالك مع منصتنا الاحترافية."
               onClick={() => handleRoleSelection("owner")}
             />
           </div>
           
           <div className="text-center mt-12">
             <p className="text-sm text-muted-foreground">
-              Already have an account?{" "}
+              لديك حساب بالفعل؟{" "}
               <button 
                 onClick={() => navigate("/auth")}
                 className="text-primary hover:text-primary-glow underline font-medium transition-colors"
               >
-                Sign in here
+                سجل دخولك هنا
               </button>
             </p>
           </div>

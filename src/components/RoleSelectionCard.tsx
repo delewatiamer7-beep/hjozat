@@ -35,7 +35,7 @@ export const RoleSelectionCard = ({ role, title, description, onClick }: RoleSel
           size="lg"
           className="w-full bg-primary hover:bg-primary-glow text-primary-foreground font-semibold transition-all duration-300 hover:shadow-lg"
         >
-          Continue as {title}
+          متابعة كـ {title}
         </Button>
       </div>
     </Card>

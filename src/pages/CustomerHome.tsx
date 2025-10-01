@@ -30,11 +30,11 @@ const CustomerHome = () => {
       <header className="bg-white border-b shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <h1 className="text-2xl font-bold text-primary">FieldBook</h1>
-              <nav className="hidden md:flex space-x-6">
-                <a href="#" className="text-foreground hover:text-primary transition-colors">Browse Fields</a>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">My Bookings</a>
+            <div className="flex items-center space-x-4 space-x-reverse">
+              <h1 className="text-2xl font-bold text-primary">فيلد بوك</h1>
+              <nav className="hidden md:flex space-x-6 space-x-reverse">
+                <a href="#" className="text-foreground hover:text-primary transition-colors">تصفح الملاعب</a>
+                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">حجوزاتي</a>
               </nav>
             </div>
             <Button 
@@ -42,7 +42,7 @@ const CustomerHome = () => {
               onClick={() => navigate("/")}
               className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
             >
-              Switch Role
+              تبديل الدور
             </Button>
           </div>
         </div>
@@ -52,35 +52,35 @@ const CustomerHome = () => {
       <section className="bg-hero-gradient text-white py-16">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            Find Your Perfect Field
+            اعثر على ملعبك المثالي
           </h2>
           <p className="text-xl mb-8 text-white/90">
-            Discover premium football fields in your area and book instantly
+            اكتشف ملاعب كرة قدم مميزة في منطقتك واحجز فوراً
           </p>
           
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 max-w-2xl mx-auto">
             <div className="flex flex-col md:flex-row gap-4">
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/70 w-5 h-5" />
+                <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/70 w-5 h-5" />
                 <Input
-                  placeholder="Search fields..."
+                  placeholder="البحث عن ملاعب..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 bg-white/20 border-white/30 text-white placeholder:text-white/70 focus:bg-white/30"
+                  className="pr-10 bg-white/20 border-white/30 text-white placeholder:text-white/70 focus:bg-white/30 text-right"
                 />
               </div>
               <div className="relative flex-1">
-                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/70 w-5 h-5" />
+                <MapPin className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/70 w-5 h-5" />
                 <Input
-                  placeholder="Location..."
+                  placeholder="الموقع..."
                   value={locationFilter}
                   onChange={(e) => setLocationFilter(e.target.value)}
-                  className="pl-10 bg-white/20 border-white/30 text-white placeholder:text-white/70 focus:bg-white/30"
+                  className="pr-10 bg-white/20 border-white/30 text-white placeholder:text-white/70 focus:bg-white/30 text-right"
                 />
               </div>
               <Button className="bg-white text-primary hover:bg-white/90 font-semibold">
-                <Filter className="w-4 h-4 mr-2" />
-                Filter
+                <Filter className="w-4 h-4 ml-2" />
+                تصفية
               </Button>
             </div>
           </div>
@@ -92,13 +92,13 @@ const CustomerHome = () => {
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between mb-8">
             <h3 className="text-3xl font-bold text-foreground">
-              Available Fields ({filteredFields.length})
+              الملاعب المتاحة ({filteredFields.length})
             </h3>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-4 space-x-reverse">
               <select className="border rounded-lg px-4 py-2 bg-background">
-                <option>Sort by Price</option>
-                <option>Sort by Rating</option>
-                <option>Sort by Distance</option>
+                <option>ترتيب حسب السعر</option>
+                <option>ترتيب حسب التقييم</option>
+                <option>ترتيب حسب المسافة</option>
               </select>
             </div>
           </div>
@@ -115,9 +115,9 @@ const CustomerHome = () => {
             </div>
           ) : error ? (
             <div className="text-center py-16">
-              <p className="text-xl text-muted-foreground mb-4">Failed to load fields</p>
+              <p className="text-xl text-muted-foreground mb-4">فشل تحميل الملاعب</p>
               <Button onClick={() => window.location.reload()} variant="outline">
-                Retry
+                إعادة المحاولة
               </Button>
             </div>
           ) : filteredFields.length > 0 ? (
@@ -138,7 +138,7 @@ const CustomerHome = () => {
           ) : (
             <div className="text-center py-16">
               <p className="text-xl text-muted-foreground mb-4">
-                {fields.length === 0 ? "No fields available yet" : "No fields found matching your criteria"}
+                {fields.length === 0 ? "لا توجد ملاعب متاحة حتى الآن" : "لم يتم العثور على ملاعب تطابق معاييرك"}
               </p>
               <Button 
                 onClick={() => {
@@ -147,7 +147,7 @@ const CustomerHome = () => {
                 }}
                 variant="outline"
               >
-                Clear Filters
+                مسح التصفية
               </Button>
             </div>
           )}

@@ -35,9 +35,9 @@ const FieldDetails = () => {
                 onClick={() => navigate("/customer")}
                 className="text-primary hover:text-primary-glow"
               >
-                ← Back to Browse
+                → العودة للتصفح
               </Button>
-              <h1 className="text-xl font-bold text-primary">FieldBook</h1>
+              <h1 className="text-xl font-bold text-primary">فيلد بوك</h1>
             </div>
           </div>
         </header>
@@ -68,8 +68,8 @@ const FieldDetails = () => {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">Field not found</h2>
-          <Button onClick={() => navigate("/customer")}>Back to Browse</Button>
+          <h2 className="text-2xl font-bold mb-4">الملعب غير موجود</h2>
+          <Button onClick={() => navigate("/customer")}>العودة للتصفح</Button>
         </div>
       </div>
     );
@@ -90,9 +90,9 @@ const FieldDetails = () => {
               onClick={() => navigate("/customer")}
               className="text-primary hover:text-primary-glow"
             >
-              ← Back to Browse
+              → العودة للتصفح
             </Button>
-            <h1 className="text-xl font-bold text-primary">FieldBook</h1>
+            <h1 className="text-xl font-bold text-primary">فيلد بوك</h1>
           </div>
         </div>
       </header>
@@ -109,7 +109,7 @@ const FieldDetails = () => {
                   alt={field.name}
                   className="w-full h-96 object-cover"
                 />
-                <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-2 rounded-lg">
+                <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-2 rounded-lg">
                   <span className="text-sm font-medium">1 / {field.images?.length || 1}</span>
                 </div>
               </div>
@@ -120,7 +120,7 @@ const FieldDetails = () => {
                     <img 
                       key={image.id}
                       src={image.image_url} 
-                      alt={`${field.name} view ${index + 2}`}
+                      alt={`${field.name} منظر ${index + 2}`}
                       className="w-full h-32 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
                     />
                   ))}
@@ -136,35 +136,35 @@ const FieldDetails = () => {
                   <div className="flex items-center gap-2">
                     <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                     <span className="font-semibold">{field.rating}</span>
-                    <span className="text-muted-foreground">(0 reviews)</span>
+                    <span className="text-muted-foreground">(0 تقييمات)</span>
                   </div>
                 </div>
                 
                 <div className="flex items-center text-muted-foreground mb-4">
-                  <MapPin className="w-5 h-5 mr-2" />
+                  <MapPin className="w-5 h-5 ml-2" />
                   {field.address || field.location}
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                  <Badge variant="secondary">Football Field</Badge>
-                  <Badge variant="secondary">Professional Grade</Badge>
+                  <Badge variant="secondary">ملعب كرة قدم</Badge>
+                  <Badge variant="secondary">درجة احترافية</Badge>
                   <Badge variant="secondary">
-                    <Users className="w-3 h-3 mr-1" />
-                    Up to 22 players
+                    <Users className="w-3 h-3 ml-1" />
+                    حتى 22 لاعب
                   </Badge>
                 </div>
               </div>
 
               {field.description && (
                 <div>
-                  <h3 className="text-xl font-semibold mb-3">Description</h3>
+                  <h3 className="text-xl font-semibold mb-3">الوصف</h3>
                   <p className="text-muted-foreground leading-relaxed">{field.description}</p>
                 </div>
               )}
 
               {field.amenities && field.amenities.length > 0 && (
                 <div>
-                  <h3 className="text-xl font-semibold mb-4">Amenities</h3>
+                  <h3 className="text-xl font-semibold mb-4">المرافق</h3>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {field.amenities.map((amenity) => {
                       const IconComponent = amenityIcons[amenity.amenity as keyof typeof amenityIcons] || Users;
@@ -188,10 +188,10 @@ const FieldDetails = () => {
                 <div className="text-center border-b pb-4">
                   <div className="text-3xl font-bold text-primary mb-2">
                     ${field.price_per_booking}
-                    <span className="text-lg font-normal text-muted-foreground">/booking</span>
+                    <span className="text-lg font-normal text-muted-foreground">/حجز</span>
                   </div>
                   <div className="flex items-center justify-center text-sm text-muted-foreground">
-                    <Clock className="w-4 h-4 mr-1" />
+                    <Clock className="w-4 h-4 ml-1" />
                     {field.operating_hours}
                   </div>
                 </div>
@@ -201,21 +201,21 @@ const FieldDetails = () => {
                   size="lg"
                   className="w-full bg-primary hover:bg-primary-glow text-primary-foreground font-semibold text-lg py-6"
                 >
-                  Book Now
+                  احجز الآن
                 </Button>
 
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Minimum booking:</span>
-                    <span className="font-medium">1 hour</span>
+                    <span className="text-muted-foreground">الحد الأدنى للحجز:</span>
+                    <span className="font-medium">ساعة واحدة</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Cancellation:</span>
-                    <span className="font-medium">24h before</span>
+                    <span className="text-muted-foreground">الإلغاء:</span>
+                    <span className="font-medium">24 ساعة قبل</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Payment:</span>
-                    <span className="font-medium">On arrival</span>
+                    <span className="text-muted-foreground">الدفع:</span>
+                    <span className="font-medium">عند الوصول</span>
                   </div>
                 </div>
 
@@ -223,9 +223,9 @@ const FieldDetails = () => {
                   <Button 
                     variant="outline" 
                     className="w-full"
-                    onClick={() => toast({ title: "Feature coming soon!", description: "Contact feature will be available soon." })}
+                    onClick={() => toast({ title: "قريباً!", description: "ميزة التواصل ستكون متاحة قريباً." })}
                   >
-                    Contact Owner
+                    تواصل مع المالك
                   </Button>
                 </div>
               </div>

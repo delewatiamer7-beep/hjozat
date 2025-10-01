@@ -12,9 +12,9 @@ import { Loader2, Users, Building, Shield } from 'lucide-react';
 import { z } from 'zod';
 
 const authSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-  name: z.string().min(2, 'Name must be at least 2 characters').optional(),
+  email: z.string().email('عنوان البريد الإلكتروني غير صالح'),
+  password: z.string().min(6, 'يجب أن تكون كلمة المرور 6 أحرف على الأقل'),
+  name: z.string().min(2, 'يجب أن يكون الاسم حرفين على الأقل').optional(),
   role: z.enum(['customer', 'owner']).optional(),
 });
 
@@ -66,7 +66,7 @@ const AuthPage = () => {
 
       if (error) {
         toast({
-          title: 'Login Failed',
+          title: 'فشل تسجيل الدخول',
           description: error.message,
           variant: 'destructive',
         });
@@ -74,8 +74,8 @@ const AuthPage = () => {
       }
 
       toast({
-        title: 'Welcome back!',
-        description: 'You have been logged in successfully.',
+        title: 'مرحباً بعودتك!',
+        description: 'تم تسجيل دخولك بنجاح.',
       });
 
       // Set flag to trigger redirect in useEffect
@@ -83,7 +83,7 @@ const AuthPage = () => {
     } catch (error) {
       if (error instanceof z.ZodError) {
         toast({
-          title: 'Validation Error',
+          title: 'خطأ في التحقق',
           description: error.errors[0].message,
           variant: 'destructive',
         });
@@ -104,7 +104,7 @@ const AuthPage = () => {
 
       if (error) {
         toast({
-          title: 'Sign Up Failed',
+          title: 'فشل إنشاء الحساب',
           description: error.message,
           variant: 'destructive',
         });
@@ -112,8 +112,8 @@ const AuthPage = () => {
       }
 
       toast({
-        title: 'Account Created!',
-        description: 'Please check your email to verify your account.',
+        title: 'تم إنشاء الحساب!',
+        description: 'يرجى التحقق من بريدك الإلكتروني لتفعيل حسابك.',
       });
 
       // Set flag to trigger redirect when user gets signed in after email verification
@@ -126,7 +126,7 @@ const AuthPage = () => {
     } catch (error) {
       if (error instanceof z.ZodError) {
         toast({
-          title: 'Validation Error',
+          title: 'خطأ في التحقق',
           description: error.errors[0].message,
           variant: 'destructive',
         });
@@ -149,42 +149,44 @@ const AuthPage = () => {
       <Card className="w-full max-w-md p-8 bg-card-gradient border-2">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-2">
-            Football Field Booking
+            حجز ملاعب كرة القدم
           </h1>
           <p className="text-muted-foreground">
-            Sign in to your account or create a new one
+            سجل دخولك أو أنشئ حساباً جديداً
           </p>
         </div>
 
         <Tabs defaultValue={defaultTab} className="w-full">
           <TabsList className="grid w-full grid-cols-2 mb-8">
-            <TabsTrigger value="login">Login</TabsTrigger>
-            <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            <TabsTrigger value="login">تسجيل الدخول</TabsTrigger>
+            <TabsTrigger value="signup">إنشاء حساب</TabsTrigger>
           </TabsList>
 
           <TabsContent value="login">
             <form onSubmit={handleLogin} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">البريد الإلكتروني</Label>
                 <Input
                   id="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
+                  placeholder="أدخل بريدك الإلكتروني"
                   required
+                  className="text-right"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">كلمة المرور</Label>
                 <Input
                   id="password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
+                  placeholder="أدخل كلمة المرور"
                   required
+                  className="text-right"
                 />
               </div>
 
@@ -195,11 +197,11 @@ const AuthPage = () => {
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Signing In...
+                    <Loader2 className="w-4 h-4 ml-2 animate-spin" />
+                    جاري تسجيل الدخول...
                   </>
                 ) : (
-                  'Sign In'
+                  'تسجيل الدخول'
                 )}
               </Button>
             </form>
@@ -208,58 +210,61 @@ const AuthPage = () => {
           <TabsContent value="signup">
             <form onSubmit={handleSignUp} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="signup-name">Full Name</Label>
+                <Label htmlFor="signup-name">الاسم الكامل</Label>
                 <Input
                   id="signup-name"
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Enter your full name"
+                  placeholder="أدخل اسمك الكامل"
                   required
+                  className="text-right"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="signup-email">Email</Label>
+                <Label htmlFor="signup-email">البريد الإلكتروني</Label>
                 <Input
                   id="signup-email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
+                  placeholder="أدخل بريدك الإلكتروني"
                   required
+                  className="text-right"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="signup-password">Password</Label>
+                <Label htmlFor="signup-password">كلمة المرور</Label>
                 <Input
                   id="signup-password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Create a password (min. 6 characters)"
+                  placeholder="أنشئ كلمة مرور (6 أحرف على الأقل)"
                   required
+                  className="text-right"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="role">Account Type</Label>
+                <Label htmlFor="role">نوع الحساب</Label>
                 <Select value={role} onValueChange={(value: 'customer' | 'owner') => setRole(value)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select your role" />
+                  <SelectTrigger className="text-right">
+                    <SelectValue placeholder="اختر دورك" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="customer">
                       <div className="flex items-center gap-2">
                         {getRoleIcon('customer')}
-                        Customer - Book football fields
+                        عميل - احجز ملاعب كرة القدم
                       </div>
                     </SelectItem>
                     <SelectItem value="owner">
                       <div className="flex items-center gap-2">
                         {getRoleIcon('owner')}
-                        Field Owner - Manage your fields
+                        مالك ملعب - أدر ملاعبك
                       </div>
                     </SelectItem>
                   </SelectContent>
@@ -273,11 +278,11 @@ const AuthPage = () => {
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Creating Account...
+                    <Loader2 className="w-4 h-4 ml-2 animate-spin" />
+                    جاري إنشاء الحساب...
                   </>
                 ) : (
-                  'Create Account'
+                  'إنشاء حساب'
                 )}
               </Button>
             </form>
@@ -290,7 +295,7 @@ const AuthPage = () => {
             onClick={() => navigate('/')}
             className="text-muted-foreground hover:text-foreground"
           >
-            ← Back to Home
+            → العودة للرئيسية
           </Button>
         </div>
       </Card>
