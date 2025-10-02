@@ -9,7 +9,7 @@ import { Plus, MapPin, Calendar, Clock, Users, Eye, Edit, Trash2, Home } from "l
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { useOwnerFields } from "@/hooks/useFields";
-import { useOwnerBookings } from "@/hooks/useBookings";
+import { useOwnerBookings, useUpdateBookingStatus } from "@/hooks/useBookings";
 import { AddFieldDialog } from "@/components/AddFieldDialog";
 import { EditFieldDialog } from "@/components/EditFieldDialog";
 import { useUpdateField, useDeleteField } from "@/hooks/useFieldMutations";
@@ -25,9 +25,29 @@ const OwnerDashboard = () => {
   
   const updateField = useUpdateField();
   const deleteField = useDeleteField();
+  const updateBookingStatus = useUpdateBookingStatus();
 
   const handleAddField = () => {
     setShowAddDialog(true);
+  };
+
+  const handleConfirmBooking = async (bookingId: string) => {
+    try {
+      await updateBookingStatus.mutateAsync({ 
+        bookingId, 
+        status: 'confirmed' 
+      });
+      toast({
+        title: "تم التأكيد بنجاح",
+        description: "تم تأكيد الحجز بنجاح",
+      });
+    } catch (error) {
+      toast({
+        title: "فشل التأكيد",
+        description: "فشل تأكيد الحجز، يرجى المحاولة مرة أخرى",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleEditField = (field: any) => {
@@ -298,8 +318,13 @@ const OwnerDashboard = () => {
                                 <Eye className="w-3 h-3" />
                               </Button>
                               {booking.status === "pending" && (
-                                <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white">
-                                  تأكيد
+                                <Button 
+                                  size="sm" 
+                                  className="bg-green-600 hover:bg-green-700 hover:shadow-lg hover:scale-105 text-white transition-all duration-200"
+                                  onClick={() => handleConfirmBooking(booking.id)}
+                                  disabled={updateBookingStatus.isPending}
+                                >
+                                  {updateBookingStatus.isPending ? "جاري التأكيد..." : "تأكيد"}
                                 </Button>
                               )}
                             </div>

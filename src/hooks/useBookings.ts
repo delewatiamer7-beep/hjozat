@@ -78,3 +78,26 @@ export const useCreateBooking = () => {
     },
   });
 };
+
+export const useUpdateBookingStatus = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: async ({ bookingId, status }: { bookingId: string; status: string }) => {
+      const { data, error } = await supabase
+        .from('bookings')
+        .update({ status })
+        .eq('id', bookingId)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['bookings'] });
+      queryClient.invalidateQueries({ queryKey: ['owner-bookings'] });
+      queryClient.invalidateQueries({ queryKey: ['user-bookings'] });
+    },
+  });
+};
