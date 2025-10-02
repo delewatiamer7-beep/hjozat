@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, MapPin, Calendar, Clock, Users, Eye, Edit, Trash2 } from "lucide-react";
+import { Plus, MapPin, Calendar, Clock, Users, Eye, Edit, Trash2, Home } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { useOwnerFields } from "@/hooks/useFields";
@@ -14,6 +15,7 @@ import { EditFieldDialog } from "@/components/EditFieldDialog";
 import { useUpdateField, useDeleteField } from "@/hooks/useFieldMutations";
 
 const OwnerDashboard = () => {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { data: fields = [], isLoading: fieldsLoading } = useOwnerFields(user?.id || "");
   const { data: bookings = [], isLoading: bookingsLoading } = useOwnerBookings(user?.id || "");
@@ -58,9 +60,19 @@ const OwnerDashboard = () => {
       <header className="bg-white border-b shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-primary">لوحة تحكم المالك</h1>
-              <p className="text-muted-foreground">أدر ملاعبك وحجوزاتك</p>
+            <div className="flex items-center gap-4">
+              <Button 
+                onClick={() => navigate("/")}
+                variant="outline"
+                className="border-green-600 text-green-600 hover:bg-green-50 rounded-lg"
+              >
+                <Home className="w-4 h-4 ml-2" />
+                العودة إلى الصفحة الرئيسية
+              </Button>
+              <div>
+                <h1 className="text-2xl font-bold text-primary">لوحة تحكم المالك</h1>
+                <p className="text-muted-foreground">أدر ملاعبك وحجوزاتك</p>
+              </div>
             </div>
             <Button 
               onClick={handleAddField}
