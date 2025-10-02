@@ -60,19 +60,9 @@ const OwnerDashboard = () => {
       <header className="bg-white border-b shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Button 
-                onClick={() => navigate("/")}
-                variant="outline"
-                className="border-green-600 text-green-600 hover:bg-green-50 rounded-lg"
-              >
-                <Home className="w-4 h-4 ml-2" />
-                العودة إلى الصفحة الرئيسية
-              </Button>
-              <div>
-                <h1 className="text-2xl font-bold text-primary">لوحة تحكم المالك</h1>
-                <p className="text-muted-foreground">أدر ملاعبك وحجوزاتك</p>
-              </div>
+            <div>
+              <h1 className="text-2xl font-bold text-primary">لوحة تحكم المالك</h1>
+              <p className="text-muted-foreground">أدر ملاعبك وحجوزاتك</p>
             </div>
             <Button 
               onClick={handleAddField}
@@ -323,6 +313,19 @@ const OwnerDashboard = () => {
             )}
           </TabsContent>
         </Tabs>
+
+        {/* Back to Home Button */}
+        <div className="flex justify-center mt-12 mb-8">
+          <Button 
+            onClick={() => navigate("/")}
+            variant="outline"
+            size="sm"
+            className="border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white rounded-lg px-6 py-2 transition-colors"
+          >
+            <Home className="w-4 h-4 ml-2" />
+            العودة إلى الصفحة الرئيسية
+          </Button>
+        </div>
       </div>
       
       <AddFieldDialog 
