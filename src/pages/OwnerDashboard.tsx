@@ -10,6 +10,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useOwnerFields } from "@/hooks/useFields";
 import { useOwnerBookings } from "@/hooks/useBookings";
 import { AddFieldDialog } from "@/components/AddFieldDialog";
+import { EditFieldDialog } from "@/components/EditFieldDialog";
 import { useUpdateField, useDeleteField } from "@/hooks/useFieldMutations";
 
 const OwnerDashboard = () => {
@@ -17,6 +18,8 @@ const OwnerDashboard = () => {
   const { data: fields = [], isLoading: fieldsLoading } = useOwnerFields(user?.id || "");
   const { data: bookings = [], isLoading: bookingsLoading } = useOwnerBookings(user?.id || "");
   const [showAddDialog, setShowAddDialog] = useState(false);
+  const [showEditDialog, setShowEditDialog] = useState(false);
+  const [editingField, setEditingField] = useState<any>(null);
   
   const updateField = useUpdateField();
   const deleteField = useDeleteField();
@@ -25,11 +28,9 @@ const OwnerDashboard = () => {
     setShowAddDialog(true);
   };
 
-  const handleEditField = (fieldId: string) => {
-    toast({
-      title: "تعديل الملعب",
-      description: "وظيفة التعديل قريباً!",
-    });
+  const handleEditField = (field: any) => {
+    setEditingField(field);
+    setShowEditDialog(true);
   };
 
   const handleDeleteField = (fieldId: string) => {
@@ -201,7 +202,7 @@ const OwnerDashboard = () => {
                           size="sm" 
                           variant="outline" 
                           className="flex-1"
-                          onClick={() => handleEditField(field.id)}
+                          onClick={() => handleEditField(field)}
                         >
                           <Edit className="w-3 h-3 ml-1" />
                           تعديل
@@ -315,6 +316,12 @@ const OwnerDashboard = () => {
       <AddFieldDialog 
         open={showAddDialog} 
         onOpenChange={setShowAddDialog} 
+      />
+      
+      <EditFieldDialog
+        open={showEditDialog}
+        onOpenChange={setShowEditDialog}
+        field={editingField}
       />
     </div>
   );
