@@ -258,43 +258,39 @@ const OwnerDashboard = () => {
             ) : (
               <Card>
                 <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead className="border-b">
-                      <tr className="text-right">
-                        <th className="p-4 font-semibold">الملعب</th>
-                        <th className="p-4 font-semibold">العميل</th>
-                        <th className="p-4 font-semibold">التاريخ والوقت</th>
-                        <th className="p-4 font-semibold">الحالة</th>
-                        <th className="p-4 font-semibold">المبلغ</th>
-                        <th className="p-4 font-semibold">الإجراءات</th>
+                  <table className="w-full border-collapse">
+                    <thead className="bg-muted/50">
+                      <tr>
+                        <th className="p-4 text-center font-semibold border-b border-r whitespace-nowrap">الملعب</th>
+                        <th className="p-4 text-center font-semibold border-b border-r whitespace-nowrap">العميل</th>
+                        <th className="p-4 text-center font-semibold border-b border-r whitespace-nowrap">التاريخ والوقت</th>
+                        <th className="p-4 text-center font-semibold border-b border-r whitespace-nowrap">الحالة</th>
+                        <th className="p-4 text-center font-semibold border-b border-r whitespace-nowrap">المبلغ</th>
+                        <th className="p-4 text-center font-semibold border-b whitespace-nowrap">الإجراءات</th>
                       </tr>
                     </thead>
                     <tbody>
                       {bookings.map((booking) => (
-                        <tr key={booking.id} className="border-b hover:bg-muted/50">
-                          <td className="p-4">
+                        <tr key={booking.id} className="hover:bg-muted/30 transition-colors">
+                          <td className="p-4 text-center border-b border-r whitespace-nowrap">
                             <div className="font-medium">{booking.fields?.name}</div>
                           </td>
-                          <td className="p-4">
-                            <div>
-                              <div className="font-medium">{booking.customer_name}</div>
-                              <div className="text-sm text-muted-foreground">{booking.customer_phone}</div>
-                            </div>
+                          <td className="p-4 text-center border-b border-r">
+                            <div className="font-medium whitespace-nowrap">{booking.customer_name}</div>
+                            <div className="text-sm text-muted-foreground whitespace-nowrap">{booking.customer_phone}</div>
                           </td>
-                          <td className="p-4">
-                            <div>
-                              <div className="font-medium">{booking.booking_date}</div>
-                              <div className="text-sm text-muted-foreground">{booking.start_time}</div>
-                            </div>
+                          <td className="p-4 text-center border-b border-r">
+                            <div className="font-medium whitespace-nowrap">{booking.booking_date}</div>
+                            <div className="text-sm text-muted-foreground whitespace-nowrap">{booking.start_time}</div>
                           </td>
-                          <td className="p-4">
+                          <td className="p-4 text-center border-b border-r">
                             <Badge className={getStatusColor(booking.status)}>
                               {booking.status}
                             </Badge>
                           </td>
-                          <td className="p-4 font-semibold">${booking.total_amount}</td>
-                          <td className="p-4">
-                            <div className="flex gap-2">
+                          <td className="p-4 text-center border-b border-r font-semibold whitespace-nowrap">${booking.total_amount}</td>
+                          <td className="p-4 text-center border-b">
+                            <div className="flex gap-2 justify-center whitespace-nowrap">
                               <Button size="sm" variant="outline">
                                 <Eye className="w-3 h-3" />
                               </Button>
