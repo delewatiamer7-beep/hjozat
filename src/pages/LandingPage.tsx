@@ -5,12 +5,16 @@ import { RoleSelectionCard } from "@/components/RoleSelectionCard";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Button } from "@/components/ui/button";
 import heroImage from "@/assets/hero-football-field.jpg";
-
 const LandingPage = () => {
   const navigate = useNavigate();
-  const { user, profile, signOut } = useAuth();
-  const { t } = useLanguage();
-
+  const {
+    user,
+    profile,
+    signOut
+  } = useAuth();
+  const {
+    t
+  } = useLanguage();
   const handleRoleSelection = (role: string) => {
     switch (role) {
       case "customer":
@@ -21,62 +25,47 @@ const LandingPage = () => {
         break;
     }
   };
-
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       {/* Navigation Bar */}
       <nav className="absolute top-0 left-0 right-0 z-20 p-6">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
-          {user ? (
-            <>
+          {user ? <>
               <div className="text-white">
-                <span className="font-semibold">{t('landing.welcome')}, {profile?.name}</span>
-                <span className="mr-2 text-sm opacity-75">({profile?.role})</span>
+                <span className="font-semibold text-lime-500">{t('landing.welcome')}, {profile?.name}</span>
+                <span className="mr-2 text-sm opacity-75 text-lime-500">({profile?.role})</span>
               </div>
               <div className="flex gap-4">
                 <LanguageSwitcher />
-                <Button
-                  variant="ghost"
-                  onClick={() => {
-                    switch (profile?.role) {
-                      case 'customer':
-                        navigate('/customer');
-                        break;
-                      case 'owner':
-                        navigate('/owner/dashboard');
-                        break;
-                      case 'admin':
-                        navigate('/admin/dashboard');
-                        break;
-                    }
-                  }}
-                  className="text-white hover:text-primary-glow"
-                >
+                <Button variant="ghost" onClick={() => {
+              switch (profile?.role) {
+                case 'customer':
+                  navigate('/customer');
+                  break;
+                case 'owner':
+                  navigate('/owner/dashboard');
+                  break;
+                case 'admin':
+                  navigate('/admin/dashboard');
+                  break;
+              }
+            }} className="text-lime-500">
                   {t('nav.dashboard')}
                 </Button>
-                <Button
-                  variant="ghost"
-                  onClick={signOut}
-                  className="text-white hover:text-primary-glow"
-                >
+                <Button variant="ghost" onClick={signOut} className="text-lime-500">
                   {t('nav.logout')}
                 </Button>
               </div>
-            </>
-          ) : (
-            <div className="ml-auto">
+            </> : <div className="ml-auto">
               <LanguageSwitcher />
-            </div>
-          )}
+            </div>}
         </div>
       </nav>
 
       {/* Hero Section */}
       <div className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${heroImage})` }}
-        >
+        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{
+        backgroundImage: `url(${heroImage})`
+      }}>
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
         </div>
         
@@ -113,36 +102,21 @@ const LandingPage = () => {
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <RoleSelectionCard
-              role="customer"
-              title={t('landing.customer')}
-              description={t('landing.customerDesc')}
-              onClick={() => handleRoleSelection("customer")}
-            />
+            <RoleSelectionCard role="customer" title={t('landing.customer')} description={t('landing.customerDesc')} onClick={() => handleRoleSelection("customer")} />
             
-            <RoleSelectionCard
-              role="owner"
-              title={t('landing.owner')}
-              description={t('landing.ownerDesc')}
-              onClick={() => handleRoleSelection("owner")}
-            />
+            <RoleSelectionCard role="owner" title={t('landing.owner')} description={t('landing.ownerDesc')} onClick={() => handleRoleSelection("owner")} />
           </div>
           
           <div className="text-center mt-12">
             <p className="text-sm text-muted-foreground">
               {t('landing.haveAccount')}{" "}
-              <button 
-                onClick={() => navigate("/login")}
-                className="text-primary hover:text-primary-glow underline font-medium transition-colors"
-              >
+              <button onClick={() => navigate("/login")} className="text-primary hover:text-primary-glow underline font-medium transition-colors">
                 {t('landing.loginHere')}
               </button>
             </p>
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default LandingPage;

@@ -9,7 +9,7 @@ export const LanguageSwitcher = () => {
   const toggleLanguage = () => {
     setLanguage(language === 'ar' ? 'en' : 'ar');
   };
-  return <Button onClick={toggleLanguage} variant="ghost" size="sm" className="gap-2 hover:bg-primary/10 transition-all duration-200 hover:scale-105 text-slate-50">
+  return <Button onClick={toggleLanguage} variant="ghost" size="sm" className="gap-2 hover:bg-primary/10 transition-all duration-200 hover:scale-105 text-lime-500">
       <Globe className="w-4 h-4" />
       <span className="font-semibold">{language === 'ar' ? 'EN' : 'AR'}</span>
     </Button>;
