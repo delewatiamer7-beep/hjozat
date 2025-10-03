@@ -25,20 +25,8 @@ const ProtectedRoute = ({
       }
 
       if (requiredRole && profile?.role !== requiredRole) {
-        // Redirect based on user's actual role
-        switch (profile?.role) {
-          case 'customer':
-            navigate('/customer');
-            break;
-          case 'owner':
-            navigate('/owner/dashboard');
-            break;
-          case 'admin':
-            navigate('/admin/dashboard');
-            break;
-          default:
-            navigate('/');
-        }
+        // Redirect to forbidden page for unauthorized access
+        navigate('/forbidden');
         return;
       }
     }

@@ -12,6 +12,7 @@ import OwnerDashboard from "./pages/OwnerDashboard";
 import AuthPage from "./pages/AuthPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
+import ForbiddenPage from "./pages/ForbiddenPage";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/auth" element={<AuthPage />} />
+            <Route path="/forbidden" element={<ForbiddenPage />} />
             <Route 
               path="/customer" 
               element={
@@ -33,8 +35,22 @@ const App = () => (
                 </ProtectedRoute>
               } 
             />
-            <Route path="/field/:id" element={<FieldDetails />} />
-            <Route path="/book/:id" element={<BookingPage />} />
+            <Route 
+              path="/field/:id" 
+              element={
+                <ProtectedRoute>
+                  <FieldDetails />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/book/:id" 
+              element={
+                <ProtectedRoute>
+                  <BookingPage />
+                </ProtectedRoute>
+              } 
+            />
             <Route 
               path="/owner/dashboard" 
               element={
