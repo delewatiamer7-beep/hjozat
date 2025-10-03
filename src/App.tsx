@@ -10,6 +10,8 @@ import FieldDetails from "./pages/FieldDetails";
 import BookingPage from "./pages/BookingPage";
 import OwnerDashboard from "./pages/OwnerDashboard";
 import AuthPage from "./pages/AuthPage";
+import LoginPage from "./pages/LoginPage";
+import SignUpPage from "./pages/SignUpPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
 import ForbiddenPage from "./pages/ForbiddenPage";
@@ -26,6 +28,8 @@ const App = () => (
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/auth" element={<AuthPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
             <Route path="/forbidden" element={<ForbiddenPage />} />
             <Route 
               path="/customer" 

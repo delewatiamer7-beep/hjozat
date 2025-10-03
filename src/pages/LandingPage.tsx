@@ -11,10 +11,10 @@ const LandingPage = () => {
   const handleRoleSelection = (role: string) => {
     switch (role) {
       case "customer":
-        navigate("/auth?role=customer&tab=login");
+        navigate("/signup?role=customer");
         break;
       case "owner":
-        navigate(`/auth?role=owner&tab=login`);
+        navigate(`/signup?role=owner`);
         break;
     }
   };
@@ -122,7 +122,7 @@ const LandingPage = () => {
             <p className="text-sm text-muted-foreground">
               لديك حساب بالفعل؟{" "}
               <button 
-                onClick={() => navigate("/auth")}
+                onClick={() => navigate("/login")}
                 className="text-primary hover:text-primary-glow underline font-medium transition-colors"
               >
                 سجل دخولك هنا
