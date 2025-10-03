@@ -1,12 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { RoleSelectionCard } from "@/components/RoleSelectionCard";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Button } from "@/components/ui/button";
 import heroImage from "@/assets/hero-football-field.jpg";
 
 const LandingPage = () => {
   const navigate = useNavigate();
   const { user, profile, signOut } = useAuth();
+  const { t } = useLanguage();
 
   const handleRoleSelection = (role: string) => {
     switch (role) {
@@ -22,44 +25,51 @@ const LandingPage = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation Bar */}
-      {user && (
-        <nav className="absolute top-0 left-0 right-0 z-20 p-6">
-          <div className="max-w-6xl mx-auto flex justify-between items-center">
-            <div className="text-white">
-              <span className="font-semibold">مرحباً، {profile?.name}</span>
-              <span className="mr-2 text-sm opacity-75">({profile?.role})</span>
+      <nav className="absolute top-0 left-0 right-0 z-20 p-6">
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
+          {user ? (
+            <>
+              <div className="text-white">
+                <span className="font-semibold">{t('landing.welcome')}, {profile?.name}</span>
+                <span className="mr-2 text-sm opacity-75">({profile?.role})</span>
+              </div>
+              <div className="flex gap-4">
+                <LanguageSwitcher />
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    switch (profile?.role) {
+                      case 'customer':
+                        navigate('/customer');
+                        break;
+                      case 'owner':
+                        navigate('/owner/dashboard');
+                        break;
+                      case 'admin':
+                        navigate('/admin/dashboard');
+                        break;
+                    }
+                  }}
+                  className="text-white hover:text-primary-glow"
+                >
+                  {t('nav.dashboard')}
+                </Button>
+                <Button
+                  variant="ghost"
+                  onClick={signOut}
+                  className="text-white hover:text-primary-glow"
+                >
+                  {t('nav.logout')}
+                </Button>
+              </div>
+            </>
+          ) : (
+            <div className="ml-auto">
+              <LanguageSwitcher />
             </div>
-            <div className="flex gap-4">
-              <Button
-                variant="ghost"
-                onClick={() => {
-                  switch (profile?.role) {
-                    case 'customer':
-                      navigate('/customer');
-                      break;
-                    case 'owner':
-                      navigate('/owner/dashboard');
-                      break;
-                    case 'admin':
-                      navigate('/admin/dashboard');
-                      break;
-                  }
-                }}
-                className="text-white hover:text-primary-glow"
-              >
-                الذهاب إلى لوحة التحكم
-              </Button>
-              <Button
-                variant="ghost"
-                onClick={signOut}
-                className="text-white hover:text-primary-glow"
-              >
-                تسجيل الخروج
-              </Button>
-            </div>
-          </div>
-        </nav>
-      )}
+          )}
+        </div>
+      </nav>
 
       {/* Hero Section */}
       <div className="relative h-screen flex items-center justify-center overflow-hidden">
@@ -72,13 +82,13 @@ const LandingPage = () => {
         
         <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-6">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-            احجز ملعبك المثالي
+            {t('landing.title')}
             <span className="block bg-hero-gradient bg-clip-text text-transparent">
-              لكرة القدم
+              {t('landing.subtitle')}
             </span>
           </h1>
           <p className="text-xl md:text-2xl mb-12 text-white/90 max-w-2xl mx-auto leading-relaxed">
-            تواصل مع أفضل ملاعب كرة القدم في منطقتك. حجز سهل، مرافق احترافية، مباريات لا تُنسى.
+            {t('landing.description')}
           </p>
         </div>
         
@@ -95,37 +105,37 @@ const LandingPage = () => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              اختر دورك
+              {t('landing.chooseRole')}
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              اختر كيف تريد استخدام منصتنا وابدأ تجربتك في حجز ملاعب كرة القدم.
+              {t('landing.chooseRoleDesc')}
             </p>
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <RoleSelectionCard
               role="customer"
-              title="عميل"
-              description="تصفح واحجز ملاعب كرة القدم في منطقتك. اعثر على المكان المثالي لمباراتك أو جلسة تدريبك القادمة."
+              title={t('landing.customer')}
+              description={t('landing.customerDesc')}
               onClick={() => handleRoleSelection("customer")}
             />
             
             <RoleSelectionCard
               role="owner"
-              title="مالك ملعب"
-              description="أدرج مرافقك الرياضية وأدر الحجوزات. نمِّ أعمالك مع منصتنا الاحترافية."
+              title={t('landing.owner')}
+              description={t('landing.ownerDesc')}
               onClick={() => handleRoleSelection("owner")}
             />
           </div>
           
           <div className="text-center mt-12">
             <p className="text-sm text-muted-foreground">
-              لديك حساب بالفعل؟{" "}
+              {t('landing.haveAccount')}{" "}
               <button 
                 onClick={() => navigate("/login")}
                 className="text-primary hover:text-primary-glow underline font-medium transition-colors"
               >
-                سجل دخولك هنا
+                {t('landing.loginHere')}
               </button>
             </p>
           </div>

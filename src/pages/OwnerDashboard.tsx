@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -17,6 +19,7 @@ import { useUpdateField, useDeleteField } from "@/hooks/useFieldMutations";
 const OwnerDashboard = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { t } = useLanguage();
   const { data: fields = [], isLoading: fieldsLoading } = useOwnerFields(user?.id || "");
   const { data: bookings = [], isLoading: bookingsLoading } = useOwnerBookings(user?.id || "");
   const [showAddDialog, setShowAddDialog] = useState(false);
@@ -38,13 +41,13 @@ const OwnerDashboard = () => {
         status: 'confirmed' 
       });
       toast({
-        title: "تم التأكيد بنجاح",
-        description: "تم تأكيد الحجز بنجاح",
+        title: t('toast.confirmSuccess'),
+        description: t('toast.confirmSuccessDesc'),
       });
     } catch (error) {
       toast({
-        title: "فشل التأكيد",
-        description: "فشل تأكيد الحجز، يرجى المحاولة مرة أخرى",
+        title: t('toast.confirmFailed'),
+        description: t('toast.confirmFailedDesc'),
         variant: "destructive",
       });
     }
@@ -81,16 +84,19 @@ const OwnerDashboard = () => {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-primary">لوحة تحكم المالك</h1>
-              <p className="text-muted-foreground">أدر ملاعبك وحجوزاتك</p>
+              <h1 className="text-2xl font-bold text-primary">{t('owner.dashboard')}</h1>
+              <p className="text-muted-foreground">{t('owner.manageFields')}</p>
             </div>
-            <Button 
-              onClick={handleAddField}
-              className="bg-primary hover:bg-primary-glow text-primary-foreground"
-            >
-              <Plus className="w-4 h-4 ml-2" />
-              إضافة ملعب جديد
-            </Button>
+            <div className="flex items-center gap-4">
+              <LanguageSwitcher />
+              <Button 
+                onClick={handleAddField}
+                className="bg-primary hover:bg-primary-glow text-primary-foreground"
+              >
+                <Plus className="w-4 h-4 ml-2" />
+                {t('owner.addField')}
+              </Button>
+            </div>
           </div>
         </div>
       </header>
@@ -101,7 +107,7 @@ const OwnerDashboard = () => {
           <Card className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">إجمالي الملاعب</p>
+                <p className="text-sm font-medium text-muted-foreground">{t('owner.totalFields')}</p>
                 <p className="text-3xl font-bold text-primary">{fields.length}</p>
               </div>
               <MapPin className="w-8 h-8 text-primary/60" />
@@ -111,7 +117,7 @@ const OwnerDashboard = () => {
           <Card className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">إجمالي الحجوزات</p>
+                <p className="text-sm font-medium text-muted-foreground">{t('owner.totalBookings')}</p>
                 <p className="text-3xl font-bold text-primary">{bookings.length}</p>
               </div>
               <Calendar className="w-8 h-8 text-primary/60" />
@@ -121,7 +127,7 @@ const OwnerDashboard = () => {
           <Card className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">قيد الانتظار</p>
+                <p className="text-sm font-medium text-muted-foreground">{t('owner.pendingBookings')}</p>
                 <p className="text-3xl font-bold text-yellow-600">
                   {bookings.filter(b => b.status === "Pending").length}
                 </p>
@@ -133,9 +139,9 @@ const OwnerDashboard = () => {
           <Card className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">الإيرادات</p>
+                <p className="text-sm font-medium text-muted-foreground">{t('owner.revenue')}</p>
                 <p className="text-3xl font-bold text-green-600">
-                  ${bookings.filter(b => b.status === "confirmed").reduce((sum, b) => sum + b.total_amount, 0)}
+                  {bookings.filter(b => b.status === "confirmed").reduce((sum, b) => sum + b.total_amount, 0)} {t('common.sar')}
                 </p>
               </div>
               <Users className="w-8 h-8 text-green-600/60" />
@@ -146,21 +152,21 @@ const OwnerDashboard = () => {
         {/* Tabs */}
         <Tabs defaultValue="fields" className="space-y-6">
           <TabsList className="grid w-full grid-cols-2 max-w-md">
-            <TabsTrigger value="fields">ملاعبي</TabsTrigger>
-            <TabsTrigger value="bookings">الحجوزات</TabsTrigger>
+            <TabsTrigger value="fields">{t('owner.myFields')}</TabsTrigger>
+            <TabsTrigger value="bookings">{t('owner.bookings')}</TabsTrigger>
           </TabsList>
 
           {/* Fields Tab */}
           <TabsContent value="fields" className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold">ملاعبي</h2>
+              <h2 className="text-2xl font-bold">{t('owner.myFields')}</h2>
               <Button 
                 onClick={handleAddField}
                 variant="outline"
                 className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
               >
                 <Plus className="w-4 h-4 ml-2" />
-                إضافة ملعب
+                {t('owner.addField')}
               </Button>
             </div>
 
@@ -180,11 +186,11 @@ const OwnerDashboard = () => {
             ) : fields.length === 0 ? (
               <div className="text-center py-16">
                 <MapPin className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2">لم تتم إضافة ملاعب بعد</h3>
-                <p className="text-muted-foreground mb-6">ابدأ بإضافة ملعبك الأول لتلقي الحجوزات</p>
+                <h3 className="text-xl font-semibold mb-2">{t('owner.noFields')}</h3>
+                <p className="text-muted-foreground mb-6">{t('owner.addFirstField')}</p>
                 <Button onClick={handleAddField} className="bg-primary hover:bg-primary-glow">
                   <Plus className="w-4 h-4 ml-2" />
-                  أضف ملعبك الأول
+                  {t('owner.addField')}
                 </Button>
               </div>
             ) : (
@@ -210,7 +216,7 @@ const OwnerDashboard = () => {
                           {field.location}
                         </div>
                         <div className="text-2xl font-bold text-primary">
-                          ${field.price_per_booking}<span className="text-sm font-normal">/حجز</span>
+                          {field.price_per_booking} {t('common.sar')}<span className="text-sm font-normal">/{t('common.bookNow')}</span>
                         </div>
                       </div>
                       
@@ -275,8 +281,8 @@ const OwnerDashboard = () => {
             ) : bookings.length === 0 ? (
               <div className="text-center py-16">
                 <Calendar className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2">لا توجد حجوزات بعد</h3>
-                <p className="text-muted-foreground">عندما يبدأ العملاء بحجز ملاعبك، ستراها هنا</p>
+                <h3 className="text-xl font-semibold mb-2">{t('owner.noBookings')}</h3>
+                <p className="text-muted-foreground">{t('owner.bookingsWillAppear')}</p>
               </div>
             ) : (
               <Card>
@@ -284,12 +290,12 @@ const OwnerDashboard = () => {
                   <table className="w-full border-collapse">
                     <thead className="bg-muted/50">
                       <tr>
-                        <th className="p-4 text-center font-semibold border-b border-r whitespace-nowrap">الملعب</th>
-                        <th className="p-4 text-center font-semibold border-b border-r whitespace-nowrap">العميل</th>
-                        <th className="p-4 text-center font-semibold border-b border-r whitespace-nowrap">التاريخ والوقت</th>
-                        <th className="p-4 text-center font-semibold border-b border-r whitespace-nowrap">الحالة</th>
-                        <th className="p-4 text-center font-semibold border-b border-r whitespace-nowrap">المبلغ</th>
-                        <th className="p-4 text-center font-semibold border-b whitespace-nowrap">الإجراءات</th>
+                        <th className="p-4 text-center font-semibold border-b border-r whitespace-nowrap">{t('owner.fieldName')}</th>
+                        <th className="p-4 text-center font-semibold border-b border-r whitespace-nowrap">{t('owner.customer')}</th>
+                        <th className="p-4 text-center font-semibold border-b border-r whitespace-nowrap">{t('owner.date')}</th>
+                        <th className="p-4 text-center font-semibold border-b border-r whitespace-nowrap">{t('owner.status')}</th>
+                        <th className="p-4 text-center font-semibold border-b border-r whitespace-nowrap">{t('owner.amount')}</th>
+                        <th className="p-4 text-center font-semibold border-b whitespace-nowrap">{t('owner.actions')}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -311,7 +317,7 @@ const OwnerDashboard = () => {
                               {booking.status}
                             </Badge>
                           </td>
-                          <td className="p-4 text-center border-b border-r font-semibold whitespace-nowrap">${booking.total_amount}</td>
+                          <td className="p-4 text-center border-b border-r font-semibold whitespace-nowrap">{booking.total_amount} {t('common.sar')}</td>
                           <td className="p-4 text-center border-b">
                             <div className="flex gap-2 justify-center whitespace-nowrap">
                               <Button size="sm" variant="outline">
@@ -324,7 +330,7 @@ const OwnerDashboard = () => {
                                   onClick={() => handleConfirmBooking(booking.id)}
                                   disabled={updateBookingStatus.isPending}
                                 >
-                                  {updateBookingStatus.isPending ? "جاري التأكيد..." : "تأكيد"}
+                                  {updateBookingStatus.isPending ? t('owner.confirming') : t('owner.confirm')}
                                 </Button>
                               )}
                             </div>
@@ -348,7 +354,7 @@ const OwnerDashboard = () => {
             className="border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white rounded-lg px-6 py-2 transition-colors"
           >
             <Home className="w-4 h-4 ml-2" />
-            العودة إلى الصفحة الرئيسية
+            {t('nav.backToHome')}
           </Button>
         </div>
       </div>

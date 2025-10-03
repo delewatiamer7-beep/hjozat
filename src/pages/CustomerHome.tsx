@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { FieldCard } from "@/components/FieldCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,6 +11,7 @@ import { useFields } from "@/hooks/useFields";
 
 const CustomerHome = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [searchTerm, setSearchTerm] = useState("");
   const [locationFilter, setLocationFilter] = useState("");
   
@@ -33,17 +36,20 @@ const CustomerHome = () => {
             <div className="flex items-center space-x-4 space-x-reverse">
               <h1 className="text-2xl font-bold text-primary">فيلد بوك</h1>
               <nav className="hidden md:flex space-x-6 space-x-reverse">
-                <a href="#" className="text-foreground hover:text-primary transition-colors">تصفح الملاعب</a>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">حجوزاتي</a>
+                <a href="#" className="text-foreground hover:text-primary transition-colors">{t('nav.browseFields')}</a>
+                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">{t('nav.myBookings')}</a>
               </nav>
             </div>
-            <Button 
-              variant="outline" 
-              onClick={() => navigate("/")}
-              className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
-            >
-              تبديل الدور
-            </Button>
+            <div className="flex items-center gap-4">
+              <LanguageSwitcher />
+              <Button 
+                variant="outline" 
+                onClick={() => navigate("/")}
+                className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+              >
+                {t('nav.switchRole')}
+              </Button>
+            </div>
           </div>
         </div>
       </header>
@@ -52,10 +58,10 @@ const CustomerHome = () => {
       <section className="bg-hero-gradient text-white py-16">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            اعثر على ملعبك المثالي
+            {t('customer.findField')}
           </h2>
           <p className="text-xl mb-8 text-white/90">
-            اكتشف ملاعب كرة قدم مميزة في منطقتك واحجز فوراً
+            {t('customer.discoverFields')}
           </p>
           
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 max-w-2xl mx-auto">
@@ -63,7 +69,7 @@ const CustomerHome = () => {
               <div className="relative flex-1">
                 <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/70 w-5 h-5" />
                 <Input
-                  placeholder="البحث عن ملاعب..."
+                  placeholder={t('customer.searchPlaceholder')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pr-10 bg-white/20 border-white/30 text-white placeholder:text-white/70 focus:bg-white/30 text-right"
@@ -72,7 +78,7 @@ const CustomerHome = () => {
               <div className="relative flex-1">
                 <MapPin className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/70 w-5 h-5" />
                 <Input
-                  placeholder="الموقع..."
+                  placeholder={t('customer.locationPlaceholder')}
                   value={locationFilter}
                   onChange={(e) => setLocationFilter(e.target.value)}
                   className="pr-10 bg-white/20 border-white/30 text-white placeholder:text-white/70 focus:bg-white/30 text-right"
@@ -80,7 +86,7 @@ const CustomerHome = () => {
               </div>
               <Button className="bg-white text-primary hover:bg-white/90 font-semibold">
                 <Filter className="w-4 h-4 ml-2" />
-                تصفية
+                {t('customer.filter')}
               </Button>
             </div>
           </div>
@@ -92,13 +98,13 @@ const CustomerHome = () => {
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between mb-8">
             <h3 className="text-3xl font-bold text-foreground">
-              الملاعب المتاحة ({filteredFields.length})
+              {t('customer.availableFields')} ({filteredFields.length})
             </h3>
             <div className="flex items-center space-x-4 space-x-reverse">
               <select className="border rounded-lg px-4 py-2 bg-background">
-                <option>ترتيب حسب السعر</option>
-                <option>ترتيب حسب التقييم</option>
-                <option>ترتيب حسب المسافة</option>
+                <option>{t('customer.sortByPrice')}</option>
+                <option>{t('customer.sortByRating')}</option>
+                <option>{t('customer.sortByDistance')}</option>
               </select>
             </div>
           </div>
@@ -115,9 +121,9 @@ const CustomerHome = () => {
             </div>
           ) : error ? (
             <div className="text-center py-16">
-              <p className="text-xl text-muted-foreground mb-4">فشل تحميل الملاعب</p>
+              <p className="text-xl text-muted-foreground mb-4">{t('customer.loadingFailed')}</p>
               <Button onClick={() => window.location.reload()} variant="outline">
-                إعادة المحاولة
+                {t('customer.retry')}
               </Button>
             </div>
           ) : filteredFields.length > 0 ? (
@@ -138,7 +144,7 @@ const CustomerHome = () => {
           ) : (
             <div className="text-center py-16">
               <p className="text-xl text-muted-foreground mb-4">
-                {fields.length === 0 ? "لا توجد ملاعب متاحة حتى الآن" : "لم يتم العثور على ملاعب تطابق معاييرك"}
+                {fields.length === 0 ? t('customer.noFields') : t('customer.noMatchingFields')}
               </p>
               <Button 
                 onClick={() => {
@@ -147,7 +153,7 @@ const CustomerHome = () => {
                 }}
                 variant="outline"
               >
-                مسح التصفية
+                {t('customer.clearFilter')}
               </Button>
             </div>
           )}
@@ -162,7 +168,7 @@ const CustomerHome = () => {
             className="border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white rounded-lg px-6 py-2 transition-colors animate-fade-in"
           >
             <Home className="w-4 h-4 ml-2" />
-            العودة إلى الصفحة الرئيسية / Back to Home
+            {t('nav.backToHome')}
           </Button>
         </div>
       </section>

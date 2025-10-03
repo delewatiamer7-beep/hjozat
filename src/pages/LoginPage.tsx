@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -23,6 +25,7 @@ const LoginPage = () => {
   const { signIn, user, profile } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   // Handle redirect after successful login
   useEffect(() => {
@@ -56,7 +59,7 @@ const LoginPage = () => {
 
       if (error) {
         toast({
-          title: 'فشل تسجيل الدخول',
+          title: t('toast.loginFailed'),
           description: error.message,
           variant: 'destructive',
         });
@@ -64,8 +67,8 @@ const LoginPage = () => {
       }
 
       toast({
-        title: 'مرحباً بعودتك!',
-        description: 'تم تسجيل دخولك بنجاح.',
+        title: t('toast.loginSuccess'),
+        description: t('toast.loginSuccessDesc'),
       });
 
       // Set flag to trigger redirect in useEffect
@@ -73,7 +76,7 @@ const LoginPage = () => {
     } catch (error) {
       if (error instanceof z.ZodError) {
         toast({
-          title: 'خطأ في التحقق',
+          title: t('toast.validationError'),
           description: error.errors[0].message,
           variant: 'destructive',
         });
@@ -85,40 +88,41 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-6">
+      <div className="absolute top-4 right-4">
+        <LanguageSwitcher />
+      </div>
       <Card className="w-full max-w-md p-8 bg-card-gradient border-2">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-2">
-            تسجيل الدخول
+            {t('auth.loginTitle')}
           </h1>
           <p className="text-muted-foreground">
-            Login to your account
+            {t('auth.login')}
           </p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="email">البريد الإلكتروني / Email</Label>
+            <Label htmlFor="email">{t('auth.email')}</Label>
             <Input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="أدخل بريدك الإلكتروني"
+              placeholder={t('auth.email')}
               required
-              className="text-right"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password">كلمة المرور / Password</Label>
+            <Label htmlFor="password">{t('auth.password')}</Label>
             <Input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="أدخل كلمة المرور"
+              placeholder={t('auth.password')}
               required
-              className="text-right"
             />
           </div>
 
@@ -129,12 +133,12 @@ const LoginPage = () => {
               className="text-primary hover:text-primary-glow p-0 h-auto"
               onClick={() => {
                 toast({
-                  title: 'استعادة كلمة المرور',
-                  description: 'يرجى التواصل مع الدعم لاستعادة كلمة المرور',
+                  title: t('auth.forgotPassword'),
+                  description: t('toast.validationError'),
                 });
               }}
             >
-              نسيت كلمة المرور؟ / Forgot Password?
+              {t('auth.forgotPassword')}
             </Button>
           </div>
 
@@ -146,10 +150,10 @@ const LoginPage = () => {
             {isLoading ? (
               <>
                 <Loader2 className="w-4 h-4 ml-2 animate-spin" />
-                جاري تسجيل الدخول...
+                {t('auth.loggingIn')}
               </>
             ) : (
-              'تسجيل الدخول / Login'
+              t('auth.login')
             )}
           </Button>
         </form>
@@ -160,7 +164,7 @@ const LoginPage = () => {
             onClick={() => navigate('/')}
             className="text-muted-foreground hover:text-foreground"
           >
-            → العودة للرئيسية / Back to Home
+            → {t('auth.backToHome')}
           </Button>
         </div>
       </Card>
