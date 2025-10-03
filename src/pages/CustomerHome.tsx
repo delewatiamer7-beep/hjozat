@@ -4,7 +4,7 @@ import { FieldCard } from "@/components/FieldCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Search, MapPin, Filter } from "lucide-react";
+import { Search, MapPin, Filter, Home } from "lucide-react";
 import { useFields } from "@/hooks/useFields";
 
 const CustomerHome = () => {
@@ -151,6 +151,19 @@ const CustomerHome = () => {
               </Button>
             </div>
           )}
+        </div>
+
+        {/* Back to Home Button */}
+        <div className="flex justify-center mt-12 mb-8">
+          <Button 
+            onClick={() => navigate("/")}
+            variant="outline"
+            size="sm"
+            className="border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white rounded-lg px-6 py-2 transition-colors animate-fade-in"
+          >
+            <Home className="w-4 h-4 ml-2" />
+            العودة إلى الصفحة الرئيسية / Back to Home
+          </Button>
         </div>
       </section>
     </div>
