@@ -51,7 +51,7 @@ const LandingPage = () => {
             }} className="text-lime-500">
                   {t('nav.dashboard')}
                 </Button>
-                <Button variant="ghost" onClick={signOut} className="text-lime-500">
+                <Button variant="ghost" onClick={signOut} className="text-slate-50">
                   {t('nav.logout')}
                 </Button>
               </div>
