@@ -37,7 +37,6 @@ const FieldDetails = () => {
               >
                 → العودة للتصفح
               </Button>
-              <h1 className="text-xl font-bold text-primary">فيلد بوك</h1>
             </div>
           </div>
         </header>
@@ -92,7 +91,6 @@ const FieldDetails = () => {
             >
               → العودة للتصفح
             </Button>
-            <h1 className="text-xl font-bold text-primary">فيلد بوك</h1>
           </div>
         </div>
       </header>

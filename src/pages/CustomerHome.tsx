@@ -6,7 +6,7 @@ import { FieldCard } from "@/components/FieldCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Search, MapPin, Filter, Home } from "lucide-react";
+import { Search, MapPin, Filter } from "lucide-react";
 import { useFields } from "@/hooks/useFields";
 
 const CustomerHome = () => {
@@ -33,8 +33,7 @@ const CustomerHome = () => {
       <header className="bg-white border-b shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4 space-x-reverse">
-              <h1 className="text-2xl font-bold text-primary">فيلد بوك</h1>
+          <div className="flex items-center space-x-4 space-x-reverse">
               <nav className="hidden md:flex space-x-6 space-x-reverse">
                 <a href="#" className="text-foreground hover:text-primary transition-colors">{t('nav.browseFields')}</a>
                 <a href="#" className="text-muted-foreground hover:text-primary transition-colors">{t('nav.myBookings')}</a>
@@ -42,13 +41,6 @@ const CustomerHome = () => {
             </div>
             <div className="flex items-center gap-4">
               <LanguageSwitcher />
-              <Button 
-                variant="outline" 
-                onClick={() => navigate("/")}
-                className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
-              >
-                {t('nav.switchRole')}
-              </Button>
             </div>
           </div>
         </div>
@@ -159,16 +151,15 @@ const CustomerHome = () => {
           )}
         </div>
 
-        {/* Back to Home Button */}
+        {/* Role Switch Button */}
         <div className="flex justify-center mt-12 mb-8">
           <Button 
             onClick={() => navigate("/")}
             variant="outline"
             size="sm"
-            className="border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white rounded-lg px-6 py-2 transition-colors animate-fade-in"
+            className="border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 hover:scale-105 animate-fade-in"
           >
-            <Home className="w-4 h-4 ml-2" />
-            {t('nav.backToHome')}
+            {t('nav.switchRole')}
           </Button>
         </div>
       </section>

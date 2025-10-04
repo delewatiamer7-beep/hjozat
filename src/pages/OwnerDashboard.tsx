@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, MapPin, Calendar, Clock, Users, Eye, Edit, Trash2, Home } from "lucide-react";
+import { Plus, MapPin, Calendar, Clock, Users, Eye, Edit, Trash2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { useOwnerFields } from "@/hooks/useFields";
@@ -345,16 +345,15 @@ const OwnerDashboard = () => {
           </TabsContent>
         </Tabs>
 
-        {/* Back to Home Button */}
+        {/* Role Switch Button */}
         <div className="flex justify-center mt-12 mb-8">
           <Button 
             onClick={() => navigate("/")}
             variant="outline"
             size="sm"
-            className="border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white rounded-lg px-6 py-2 transition-colors"
+            className="border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 hover:scale-105"
           >
-            <Home className="w-4 h-4 ml-2" />
-            {t('nav.backToHome')}
+            {t('nav.switchRole')}
           </Button>
         </div>
       </div>
