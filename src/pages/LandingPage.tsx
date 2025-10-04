@@ -106,15 +106,6 @@ const LandingPage = () => {
             
             <RoleSelectionCard role="owner" title={t('landing.owner')} description={t('landing.ownerDesc')} onClick={() => handleRoleSelection("owner")} />
           </div>
-          
-          <div className="text-center mt-12">
-            <p className="text-sm text-muted-foreground">
-              {t('landing.haveAccount')}{" "}
-              <button onClick={() => navigate("/login")} className="text-primary hover:text-primary-glow underline font-medium transition-colors">
-                {t('landing.loginHere')}
-              </button>
-            </p>
-          </div>
         </div>
       </div>
     </div>;
