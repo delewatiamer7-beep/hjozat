@@ -32,7 +32,7 @@ const LandingPage = () => {
           {user ? <>
               <div className="text-white">
                 <span className="font-semibold text-slate-50">{t('landing.welcome')}, {profile?.name}</span>
-                <span className="mr-2 text-sm opacity-75 text-lime-500">({profile?.role})</span>
+                <span className="mr-2 text-sm opacity-75 text-slate-50">({profile?.role})</span>
               </div>
               <div className="flex gap-4">
                 <LanguageSwitcher />
