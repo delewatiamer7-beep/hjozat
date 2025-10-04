@@ -49,6 +49,19 @@ const translations = {
     'auth.signupTitle': 'إنشاء حساب جديد',
     'auth.createAccount': 'إنشاء حساب جديد',
     'auth.backToHome': 'العودة للرئيسية',
+    'auth.logoutSuccess': 'تم تسجيل الخروج بنجاح',
+    
+    // Waiting Page
+    'waiting.welcome': 'مرحباً!',
+    'waiting.subtitle': 'نحن نقوم بإعداد حسابك',
+    'waiting.name': 'الاسم',
+    'waiting.email': 'البريد الإلكتروني',
+    'waiting.role': 'الدور',
+    'waiting.userRole': 'مستخدم',
+    'waiting.ownerRole': 'مالك',
+    'waiting.browsePlaygrounds': 'تصفح الملاعب',
+    'waiting.ownerDashboard': 'لوحة تحكم المالك',
+    'waiting.processing': 'جارٍ المعالجة...',
     
     // Customer Dashboard
     'customer.findField': 'اعثر على ملعبك المثالي',
@@ -156,6 +169,19 @@ const translations = {
     'auth.signupTitle': 'Create New Account',
     'auth.createAccount': 'Create New Account',
     'auth.backToHome': 'Back to Home',
+    'auth.logoutSuccess': 'Logged out successfully',
+    
+    // Waiting Page
+    'waiting.welcome': 'Welcome!',
+    'waiting.subtitle': "We're setting up your account",
+    'waiting.name': 'Name',
+    'waiting.email': 'Email',
+    'waiting.role': 'Role',
+    'waiting.userRole': 'User',
+    'waiting.ownerRole': 'Owner',
+    'waiting.browsePlaygrounds': 'Browse Playgrounds',
+    'waiting.ownerDashboard': 'Owner Dashboard',
+    'waiting.processing': 'Processing...',
     
     // Customer Dashboard
     'customer.findField': 'Find Your Perfect Field',

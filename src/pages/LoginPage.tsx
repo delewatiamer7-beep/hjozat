@@ -30,20 +30,8 @@ const LoginPage = () => {
   // Handle redirect after successful login
   useEffect(() => {
     if (justLoggedIn && user && profile) {
-      // Redirect based on user role
-      switch (profile.role) {
-        case 'customer':
-          navigate('/customer');
-          break;
-        case 'owner':
-          navigate('/owner/dashboard');
-          break;
-        case 'admin':
-          navigate('/admin/dashboard');
-          break;
-        default:
-          navigate('/');
-      }
+      // Redirect to waiting page
+      navigate('/waiting');
       setJustLoggedIn(false);
     }
   }, [justLoggedIn, user, profile, navigate]);

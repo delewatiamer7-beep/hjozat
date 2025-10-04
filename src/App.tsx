@@ -13,6 +13,7 @@ import OwnerDashboard from "./pages/OwnerDashboard";
 import AuthPage from "./pages/AuthPage";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
+import WaitingPage from "./pages/WaitingPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
 import ForbiddenPage from "./pages/ForbiddenPage";
@@ -34,6 +35,14 @@ const App = () => (
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/forbidden" element={<ForbiddenPage />} />
             <Route 
+              path="/waiting" 
+              element={
+                <ProtectedRoute>
+                  <WaitingPage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route
               path="/customer" 
               element={
                 <ProtectedRoute requiredRole="customer">

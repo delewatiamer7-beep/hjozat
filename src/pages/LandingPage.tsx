@@ -7,14 +7,7 @@ import { Button } from "@/components/ui/button";
 import heroImage from "@/assets/hero-football-field.jpg";
 const LandingPage = () => {
   const navigate = useNavigate();
-  const {
-    user,
-    profile,
-    signOut
-  } = useAuth();
-  const {
-    t
-  } = useLanguage();
+  const { t } = useLanguage();
   const handleRoleSelection = (role: string) => {
     switch (role) {
       case "customer":
@@ -28,36 +21,8 @@ const LandingPage = () => {
   return <div className="min-h-screen bg-background">
       {/* Navigation Bar */}
       <nav className="absolute top-0 left-0 right-0 z-20 p-6">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          {user ? <>
-              <div className="text-white">
-                <span className="font-semibold text-slate-50">{t('landing.welcome')}, {profile?.name}</span>
-                <span className="mr-2 text-sm opacity-75 text-slate-50">({profile?.role})</span>
-              </div>
-              <div className="flex gap-4">
-                <LanguageSwitcher />
-                <Button variant="ghost" onClick={() => {
-              switch (profile?.role) {
-                case 'customer':
-                  navigate('/customer');
-                  break;
-                case 'owner':
-                  navigate('/owner/dashboard');
-                  break;
-                case 'admin':
-                  navigate('/admin/dashboard');
-                  break;
-              }
-            }} className="text-slate-50">
-                  {t('nav.dashboard')}
-                </Button>
-                <Button variant="ghost" onClick={signOut} className="text-slate-50">
-                  {t('nav.logout')}
-                </Button>
-              </div>
-            </> : <div className="ml-auto">
-              <LanguageSwitcher />
-            </div>}
+        <div className="max-w-6xl mx-auto flex justify-end">
+          <LanguageSwitcher />
         </div>
       </nav>
 
