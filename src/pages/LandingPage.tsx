@@ -48,7 +48,7 @@ const LandingPage = () => {
                   navigate('/admin/dashboard');
                   break;
               }
-            }} className="text-lime-500">
+            }} className="text-slate-50">
                   {t('nav.dashboard')}
                 </Button>
                 <Button variant="ghost" onClick={signOut} className="text-slate-50">
