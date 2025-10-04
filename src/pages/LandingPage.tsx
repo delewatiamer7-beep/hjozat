@@ -31,7 +31,7 @@ const LandingPage = () => {
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           {user ? <>
               <div className="text-white">
-                <span className="font-semibold text-lime-500">{t('landing.welcome')}, {profile?.name}</span>
+                <span className="font-semibold text-slate-50">{t('landing.welcome')}, {profile?.name}</span>
                 <span className="mr-2 text-sm opacity-75 text-lime-500">({profile?.role})</span>
               </div>
               <div className="flex gap-4">
