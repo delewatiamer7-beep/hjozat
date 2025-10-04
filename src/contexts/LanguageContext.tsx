@@ -47,6 +47,7 @@ const translations = {
     'auth.ownerRole': 'مالك ملعب - أدر ملاعبك',
     'auth.loginTitle': 'تسجيل الدخول',
     'auth.signupTitle': 'إنشاء حساب جديد',
+    'auth.createAccount': 'إنشاء حساب جديد',
     'auth.backToHome': 'العودة للرئيسية',
     
     // Customer Dashboard
@@ -153,6 +154,7 @@ const translations = {
     'auth.ownerRole': 'Field Owner - Manage your fields',
     'auth.loginTitle': 'Login',
     'auth.signupTitle': 'Create New Account',
+    'auth.createAccount': 'Create New Account',
     'auth.backToHome': 'Back to Home',
     
     // Customer Dashboard

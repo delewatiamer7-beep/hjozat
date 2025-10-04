@@ -18,10 +18,10 @@ const LandingPage = () => {
   const handleRoleSelection = (role: string) => {
     switch (role) {
       case "customer":
-        navigate("/signup?role=customer");
+        navigate("/login?role=customer");
         break;
       case "owner":
-        navigate(`/signup?role=owner`);
+        navigate(`/login?role=owner`);
         break;
     }
   };

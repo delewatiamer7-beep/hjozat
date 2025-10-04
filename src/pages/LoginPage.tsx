@@ -158,7 +158,15 @@ const LoginPage = () => {
           </Button>
         </form>
 
-        <div className="mt-8 text-center">
+        <div className="mt-6 text-center space-y-4">
+          <Button
+            variant="outline"
+            onClick={() => navigate('/signup')}
+            className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+          >
+            {t('auth.createAccount')}
+          </Button>
+          
           <Button
             variant="ghost"
             onClick={() => navigate('/')}
