@@ -32,6 +32,7 @@ const translations = {
     'landing.haveAccount': 'لديك حساب بالفعل؟',
     'landing.loginHere': 'سجل دخولك هنا',
     'landing.welcome': 'مرحباً',
+    'landing.back': 'عودة',
     
     // Auth
     'auth.login': 'تسجيل الدخول',
@@ -152,6 +153,7 @@ const translations = {
     'landing.haveAccount': 'Already have an account?',
     'landing.loginHere': 'Login here',
     'landing.welcome': 'Welcome',
+    'landing.back': 'Back',
     
     // Auth
     'auth.login': 'Login',

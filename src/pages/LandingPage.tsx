@@ -1,13 +1,32 @@
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { RoleSelectionCard } from "@/components/RoleSelectionCard";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { ArrowLeft } from "lucide-react";
 import heroImage from "@/assets/hero-football-field.jpg";
 const LandingPage = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const [hasHistory, setHasHistory] = useState(false);
+
+  useEffect(() => {
+    setHasHistory(window.history.length > 1);
+  }, []);
+
+  const handleBack = () => {
+    window.history.back();
+  };
+
+  const handleBackKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleBack();
+    }
+  };
+
   const handleRoleSelection = (role: string) => {
     switch (role) {
       case "customer":
@@ -21,8 +40,29 @@ const LandingPage = () => {
   return <div className="min-h-screen bg-background">
       {/* Navigation Bar */}
       <nav className="absolute top-0 left-0 right-0 z-20 p-6">
-        <div className="max-w-6xl mx-auto flex justify-end">
-          <LanguageSwitcher />
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
+          {hasHistory && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={handleBack}
+                    onKeyDown={handleBackKeyDown}
+                    className="w-10 h-10 rounded-full border border-white/30 bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/50"
+                    aria-label={t('landing.back')}
+                  >
+                    <ArrowLeft className="w-5 h-5 text-white" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{t('landing.back')}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+          <div className={!hasHistory ? "ml-auto" : ""}>
+            <LanguageSwitcher />
+          </div>
         </div>
       </nav>
 
