@@ -11,21 +11,13 @@ import { Calendar } from "@/components/ui/calendar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
-import { CalendarIcon, MapPin, Clock, Star } from "lucide-react";
+import { CalendarIcon, MapPin, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 import { useField } from "@/hooks/useFields";
 import { useCreateBooking } from "@/hooks/useBookings";
 import { useAuth } from "@/contexts/AuthContext";
-
-const bookingSchema = z.object({
-  customerName: z.string().trim().min(1, "اسم العميل مطلوب").max(100, "يجب أن يكون الاسم أقل من 100 حرف"),
-  phone: z.string().trim().min(10, "رقم هاتف صحيح مطلوب").max(20, "يجب أن يكون رقم الهاتف أقل من 20 رقم"),
-  date: z.date({ required_error: "يرجى اختيار التاريخ" }),
-  time: z.string().min(1, "يرجى اختيار الوقت"),
-});
-
-type BookingFormData = z.infer<typeof bookingSchema>;
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Available time slots
 const timeSlots = [
@@ -38,18 +30,27 @@ const BookingPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [selectedTime, setSelectedTime] = useState("");
   
   const { data: field, isLoading, error } = useField(id || "");
   const createBooking = useCreateBooking();
 
+  const bookingSchema = z.object({
+    customerName: z.string().trim().min(1, t('booking.customerNameRequired')).max(100, t('booking.customerNameMaxLength')),
+    phone: z.string().trim().min(10, t('booking.phoneMinLength')).max(20, t('booking.phoneMaxLength')),
+    date: z.date({ required_error: t('booking.dateRequired') }),
+    time: z.string().min(1, t('booking.timeRequired')),
+  });
+
+  type BookingFormData = z.infer<typeof bookingSchema>;
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
-    watch
   } = useForm<BookingFormData>({
     resolver: zodResolver(bookingSchema)
   });
@@ -74,15 +75,15 @@ const BookingPage = () => {
       });
       
       toast({
-        title: "تم إرسال الحجز!",
-        description: "تم إرسال طلب الحجز إلى مالك الملعب. ستتلقى تأكيداً قريباً.",
+        title: t('booking.sent'),
+        description: t('booking.successDesc'),
       });
       
       navigate("/customer");
     } catch (error) {
       toast({
-        title: "فشل الحجز",
-        description: "حدث خطأ أثناء إرسال حجزك. يرجى المحاولة مرة أخرى.",
+        title: t('booking.failed'),
+        description: t('booking.failedDesc'),
         variant: "destructive"
       });
     }
@@ -111,9 +112,9 @@ const BookingPage = () => {
                 onClick={() => navigate("/customer")}
                 className="text-primary hover:text-primary-glow"
               >
-                → العودة للتصفح
+                → {t('field.backToBrowse')}
               </Button>
-              <h1 className="text-xl font-bold text-primary">احجز ملعبك</h1>
+              <h1 className="text-xl font-bold text-primary">{t('booking.title')}</h1>
             </div>
           </div>
         </header>
@@ -145,8 +146,8 @@ const BookingPage = () => {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">الملعب غير موجود</h2>
-          <Button onClick={() => navigate("/customer")}>العودة للتصفح</Button>
+          <h2 className="text-2xl font-bold mb-4">{t('field.notFound')}</h2>
+          <Button onClick={() => navigate("/customer")}>{t('field.backToBrowse')}</Button>
         </div>
       </div>
     );
@@ -163,9 +164,9 @@ const BookingPage = () => {
               onClick={() => navigate(`/field/${id}`)}
               className="text-primary hover:text-primary-glow"
             >
-              → العودة لتفاصيل الملعب
+              → {t('booking.backToDetails')}
             </Button>
-            <h1 className="text-xl font-bold text-primary">احجز ملعبك</h1>
+            <h1 className="text-xl font-bold text-primary">{t('booking.title')}</h1>
           </div>
         </div>
       </header>
@@ -199,24 +200,24 @@ const BookingPage = () => {
                 <div className="mt-4 pt-4 border-t">
                   <div className="text-2xl font-bold text-primary">
                     ${field.price_per_booking}
-                    <span className="text-sm font-normal text-muted-foreground">/حجز</span>
+                    <span className="text-sm font-normal text-muted-foreground">/{t('booking.perBooking')}</span>
                   </div>
                 </div>
 
                 {selectedDate && selectedTime && (
                   <div className="mt-4 pt-4 border-t">
-                    <h4 className="font-semibold mb-2">ملخص الحجز</h4>
+                    <h4 className="font-semibold mb-2">{t('booking.summary')}</h4>
                     <div className="space-y-1 text-sm">
                       <div className="flex justify-between">
-                        <span>التاريخ:</span>
+                        <span>{t('booking.date')}:</span>
                         <span>{format(selectedDate, "PPP")}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span>الوقت:</span>
+                        <span>{t('booking.time')}:</span>
                         <span>{selectedTime}</span>
                       </div>
                       <div className="flex justify-between font-semibold pt-2 border-t">
-                        <span>الإجمالي:</span>
+                        <span>{t('booking.total')}:</span>
                         <span>${field.price_per_booking}</span>
                       </div>
                     </div>
@@ -230,22 +231,22 @@ const BookingPage = () => {
           <div className="md:col-span-2">
             <Card className="p-8">
               <div className="mb-8">
-                <h2 className="text-3xl font-bold mb-2">أكمل حجزك</h2>
-                <p className="text-muted-foreground">املأ بياناتك لحجز هذا الملعب</p>
+                <h2 className="text-3xl font-bold mb-2">{t('booking.complete')}</h2>
+                <p className="text-muted-foreground">{t('booking.fillDetails')}</p>
               </div>
 
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 {/* Customer Information */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold">معلومات الاتصال</h3>
+                  <h3 className="text-lg font-semibold">{t('booking.contactInfo')}</h3>
                   
                   <div>
-                    <Label htmlFor="customerName">الاسم الكامل *</Label>
+                    <Label htmlFor="customerName">{t('booking.fullName')} *</Label>
                     <Input
                       id="customerName"
                       {...register("customerName")}
                       className={cn(errors.customerName && "border-destructive", "text-right")}
-                      placeholder="أدخل اسمك الكامل"
+                      placeholder={t('booking.fullNamePlaceholder')}
                     />
                     {errors.customerName && (
                       <p className="text-sm text-destructive mt-1">{errors.customerName.message}</p>
@@ -253,12 +254,12 @@ const BookingPage = () => {
                   </div>
 
                   <div>
-                    <Label htmlFor="phone">رقم الهاتف *</Label>
+                    <Label htmlFor="phone">{t('booking.phone')} *</Label>
                     <Input
                       id="phone"
                       {...register("phone")}
                       className={cn(errors.phone && "border-destructive", "text-right")}
-                      placeholder="أدخل رقم هاتفك"
+                      placeholder={t('booking.phonePlaceholder')}
                       type="tel"
                     />
                     {errors.phone && (
@@ -269,12 +270,12 @@ const BookingPage = () => {
 
                 {/* Date & Time Selection */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold">اختر التاريخ والوقت</h3>
+                  <h3 className="text-lg font-semibold">{t('booking.selectDateTime')}</h3>
                   
                   <div className="grid md:grid-cols-2 gap-4">
                     {/* Date Picker */}
                     <div>
-                      <Label>التاريخ *</Label>
+                      <Label>{t('booking.date')} *</Label>
                       <Popover>
                         <PopoverTrigger asChild>
                           <Button
@@ -286,7 +287,7 @@ const BookingPage = () => {
                             )}
                           >
                             <CalendarIcon className="ml-2 h-4 w-4" />
-                            {selectedDate ? format(selectedDate, "PPP") : "اختر التاريخ"}
+                            {selectedDate ? format(selectedDate, "PPP") : t('booking.selectDate')}
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0" align="start">
@@ -307,7 +308,7 @@ const BookingPage = () => {
 
                     {/* Time Selection */}
                     <div>
-                      <Label>الوقت *</Label>
+                      <Label>{t('booking.time')} *</Label>
                       <div className="grid grid-cols-3 gap-2 mt-2 max-h-40 overflow-y-auto border rounded-lg p-2">
                         {timeSlots.map((time) => (
                           <Button
@@ -343,15 +344,15 @@ const BookingPage = () => {
                     {createBooking.isPending ? (
                       <>
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white ml-2" />
-                        جاري إرسال الحجز...
+                        {t('booking.sending')}
                       </>
                     ) : (
-                      "تأكيد الحجز"
+                      t('booking.confirm')
                     )}
                   </Button>
                   
                   <p className="text-sm text-muted-foreground text-center mt-4">
-                    سيكون حجزك قيد الانتظار حتى يتم تأكيده من قبل مالك الملعب
+                    {t('booking.pendingNote')}
                   </p>
                 </div>
               </form>

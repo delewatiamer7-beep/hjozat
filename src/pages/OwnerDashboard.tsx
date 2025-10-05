@@ -59,7 +59,7 @@ const OwnerDashboard = () => {
   };
 
   const handleDeleteField = (fieldId: string) => {
-    if (confirm("هل أنت متأكد من حذف هذا الملعب؟ لا يمكن التراجع عن هذا الإجراء.")) {
+    if (confirm(t('field.deleteConfirm'))) {
       deleteField.mutate(fieldId);
     }
   };
@@ -221,7 +221,7 @@ const OwnerDashboard = () => {
                       </div>
                       
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">0 حجوزات</span>
+                        <span className="text-muted-foreground">0 {t('field.bookings')}</span>
                         <span className="font-medium">★ {field.rating}</span>
                       </div>
                       
@@ -233,7 +233,7 @@ const OwnerDashboard = () => {
                           onClick={() => handleEditField(field)}
                         >
                           <Edit className="w-3 h-3 ml-1" />
-                          تعديل
+                          {t('field.editButton')}
                         </Button>
                         <Button 
                           size="sm" 
@@ -242,7 +242,7 @@ const OwnerDashboard = () => {
                           onClick={() => handleDeleteField(field.id)}
                         >
                           <Trash2 className="w-3 h-3 ml-1" />
-                          حذف
+                          {t('field.deleteButton')}
                         </Button>
                       </div>
                     </div>
@@ -255,11 +255,11 @@ const OwnerDashboard = () => {
           {/* Bookings Tab */}
           <TabsContent value="bookings" className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold">الحجوزات الأخيرة</h2>
+              <h2 className="text-2xl font-bold">{t('field.recentBookings')}</h2>
               <div className="flex gap-2">
-                <Badge variant="secondary">الكل: {bookings.length}</Badge>
+                <Badge variant="secondary">{t('field.all')}: {bookings.length}</Badge>
                 <Badge className="bg-yellow-100 text-yellow-800">
-                  قيد الانتظار: {bookings.filter(b => b.status === "Pending").length}
+                  {t('field.pending')}: {bookings.filter(b => b.status === "Pending").length}
                 </Badge>
               </div>
             </div>

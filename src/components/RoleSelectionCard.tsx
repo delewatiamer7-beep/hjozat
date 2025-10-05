@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Users, Building, Shield } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface RoleSelectionCardProps {
   role: "customer" | "owner" | "admin";
@@ -17,6 +18,7 @@ const roleIcons = {
 
 export const RoleSelectionCard = ({ role, title, description, onClick }: RoleSelectionCardProps) => {
   const Icon = roleIcons[role];
+  const { t } = useLanguage();
   
   return (
     <Card className="group relative overflow-hidden bg-card-gradient border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-card hover:-translate-y-1">
@@ -35,7 +37,7 @@ export const RoleSelectionCard = ({ role, title, description, onClick }: RoleSel
           size="lg"
           className="w-full bg-primary hover:bg-primary-glow text-primary-foreground font-semibold transition-all duration-300 hover:shadow-lg"
         >
-          متابعة كـ {title}
+          {t('common.continueAs')} {title}
         </Button>
       </div>
     </Card>

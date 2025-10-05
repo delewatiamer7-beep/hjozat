@@ -6,6 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { MapPin, Clock, Star, Users, Wifi, Car, Bath, Coffee } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useField } from "@/hooks/useFields";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Amenity icons mapping
 const amenityIcons = {
@@ -20,6 +21,7 @@ const amenityIcons = {
 const FieldDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { t } = useLanguage();
   
   const { data: field, isLoading, error } = useField(id || "");
 
@@ -35,7 +37,7 @@ const FieldDetails = () => {
                 onClick={() => navigate("/customer")}
                 className="text-primary hover:text-primary-glow"
               >
-                → العودة للتصفح
+                → {t('field.backToBrowse')}
               </Button>
             </div>
           </div>
@@ -67,8 +69,8 @@ const FieldDetails = () => {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">الملعب غير موجود</h2>
-          <Button onClick={() => navigate("/customer")}>العودة للتصفح</Button>
+          <h2 className="text-2xl font-bold mb-4">{t('field.notFound')}</h2>
+          <Button onClick={() => navigate("/customer")}>{t('field.backToBrowse')}</Button>
         </div>
       </div>
     );
@@ -89,7 +91,7 @@ const FieldDetails = () => {
               onClick={() => navigate("/customer")}
               className="text-primary hover:text-primary-glow"
             >
-              → العودة للتصفح
+              → {t('field.backToBrowse')}
             </Button>
           </div>
         </div>
@@ -118,7 +120,7 @@ const FieldDetails = () => {
                     <img 
                       key={image.id}
                       src={image.image_url} 
-                      alt={`${field.name} منظر ${index + 2}`}
+                      alt={`${field.name} ${t('field.view')} ${index + 2}`}
                       className="w-full h-32 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
                     />
                   ))}
@@ -134,7 +136,7 @@ const FieldDetails = () => {
                   <div className="flex items-center gap-2">
                     <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                     <span className="font-semibold">{field.rating}</span>
-                    <span className="text-muted-foreground">(0 تقييمات)</span>
+                    <span className="text-muted-foreground">(0 {t('field.reviews')})</span>
                   </div>
                 </div>
                 
@@ -144,25 +146,25 @@ const FieldDetails = () => {
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                  <Badge variant="secondary">ملعب كرة قدم</Badge>
-                  <Badge variant="secondary">درجة احترافية</Badge>
+                  <Badge variant="secondary">{t('field.footballField')}</Badge>
+                  <Badge variant="secondary">{t('field.professionalGrade')}</Badge>
                   <Badge variant="secondary">
                     <Users className="w-3 h-3 ml-1" />
-                    حتى 22 لاعب
+                    {t('field.upToPlayers')}
                   </Badge>
                 </div>
               </div>
 
               {field.description && (
                 <div>
-                  <h3 className="text-xl font-semibold mb-3">الوصف</h3>
+                  <h3 className="text-xl font-semibold mb-3">{t('field.description')}</h3>
                   <p className="text-muted-foreground leading-relaxed">{field.description}</p>
                 </div>
               )}
 
               {field.amenities && field.amenities.length > 0 && (
                 <div>
-                  <h3 className="text-xl font-semibold mb-4">المرافق</h3>
+                  <h3 className="text-xl font-semibold mb-4">{t('field.amenities')}</h3>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {field.amenities.map((amenity) => {
                       const IconComponent = amenityIcons[amenity.amenity as keyof typeof amenityIcons] || Users;
@@ -186,7 +188,7 @@ const FieldDetails = () => {
                 <div className="text-center border-b pb-4">
                   <div className="text-3xl font-bold text-primary mb-2">
                     ${field.price_per_booking}
-                    <span className="text-lg font-normal text-muted-foreground">/حجز</span>
+                    <span className="text-lg font-normal text-muted-foreground">/{t('booking.perBooking')}</span>
                   </div>
                   <div className="flex items-center justify-center text-sm text-muted-foreground">
                     <Clock className="w-4 h-4 ml-1" />
@@ -199,21 +201,21 @@ const FieldDetails = () => {
                   size="lg"
                   className="w-full bg-primary hover:bg-primary-glow text-primary-foreground font-semibold text-lg py-6"
                 >
-                  احجز الآن
+                  {t('common.bookNow')}
                 </Button>
 
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">الحد الأدنى للحجز:</span>
-                    <span className="font-medium">ساعة واحدة</span>
+                    <span className="text-muted-foreground">{t('field.minBooking')}:</span>
+                    <span className="font-medium">{t('field.oneHour')}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">الإلغاء:</span>
-                    <span className="font-medium">24 ساعة قبل</span>
+                    <span className="text-muted-foreground">{t('field.cancellation')}:</span>
+                    <span className="font-medium">{t('field.cancellationPolicy')}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">الدفع:</span>
-                    <span className="font-medium">عند الوصول</span>
+                    <span className="text-muted-foreground">{t('field.payment')}:</span>
+                    <span className="font-medium">{t('field.paymentOnArrival')}</span>
                   </div>
                 </div>
 
@@ -221,9 +223,9 @@ const FieldDetails = () => {
                   <Button 
                     variant="outline" 
                     className="w-full"
-                    onClick={() => toast({ title: "قريباً!", description: "ميزة التواصل ستكون متاحة قريباً." })}
+                    onClick={() => toast({ title: t('field.comingSoon'), description: t('field.contactFeature') })}
                   >
-                    تواصل مع المالك
+                    {t('booking.contactOwner')}
                   </Button>
                 </div>
               </div>
