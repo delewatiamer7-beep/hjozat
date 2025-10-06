@@ -18,8 +18,9 @@ import { useUpdateField, useDeleteField } from "@/hooks/useFieldMutations";
 
 const OwnerDashboard = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const { t } = useLanguage();
+  const [isSwitchingRole, setIsSwitchingRole] = useState(false);
   const { data: fields = [], isLoading: fieldsLoading } = useOwnerFields(user?.id || "");
   const { data: bookings = [], isLoading: bookingsLoading } = useOwnerBookings(user?.id || "");
   const [showAddDialog, setShowAddDialog] = useState(false);
@@ -61,6 +62,25 @@ const OwnerDashboard = () => {
   const handleDeleteField = (fieldId: string) => {
     if (confirm(t('field.deleteConfirm'))) {
       deleteField.mutate(fieldId);
+    }
+  };
+
+  const handleSwitchRole = async () => {
+    setIsSwitchingRole(true);
+    try {
+      await signOut();
+      toast({
+        title: t('nav.switchRoleSuccess'),
+        description: t('nav.switchRoleSuccessDesc'),
+      });
+      navigate('/');
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to logout',
+        variant: "destructive",
+      });
+      setIsSwitchingRole(false);
     }
   };
 
@@ -348,12 +368,13 @@ const OwnerDashboard = () => {
         {/* Role Switch Button */}
         <div className="flex justify-center mt-12 mb-8">
           <Button 
-            onClick={() => navigate("/")}
+            onClick={handleSwitchRole}
+            disabled={isSwitchingRole}
             variant="outline"
             size="sm"
             className="border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 hover:scale-105"
           >
-            {t('nav.switchRole')}
+            {isSwitchingRole ? t('nav.switchingRole') : t('nav.switchRole')}
           </Button>
         </div>
       </div>

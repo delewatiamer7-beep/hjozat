@@ -13,6 +13,9 @@ const translations = {
   ar: {
     // Navigation
     'nav.switchRole': 'تبديل الدور',
+    'nav.switchingRole': 'جاري تسجيل الخروج...',
+    'nav.switchRoleSuccess': 'تم تسجيل الخروج بنجاح',
+    'nav.switchRoleSuccessDesc': 'يرجى اختيار دورك وتسجيل الدخول.',
     'nav.dashboard': 'الذهاب إلى لوحة التحكم',
     'nav.logout': 'تسجيل الخروج',
     'nav.backToHome': 'العودة إلى الصفحة الرئيسية',
@@ -239,6 +242,9 @@ const translations = {
   en: {
     // Navigation
     'nav.switchRole': 'Switch Role',
+    'nav.switchingRole': 'Logging out...',
+    'nav.switchRoleSuccess': 'Logged out successfully',
+    'nav.switchRoleSuccessDesc': 'Please select your role and log in.',
     'nav.dashboard': 'Go to Dashboard',
     'nav.logout': 'Logout',
     'nav.backToHome': 'Back to Home',

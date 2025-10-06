@@ -8,12 +8,16 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Search, MapPin, Filter } from "lucide-react";
 import { useFields } from "@/hooks/useFields";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "@/hooks/use-toast";
 
 const CustomerHome = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const { signOut } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [locationFilter, setLocationFilter] = useState("");
+  const [isSwitchingRole, setIsSwitchingRole] = useState(false);
   
   const { data: fields = [], isLoading, error } = useFields();
 
@@ -25,6 +29,25 @@ const CustomerHome = () => {
 
   const handleViewDetails = (fieldId: string) => {
     navigate(`/field/${fieldId}`);
+  };
+
+  const handleSwitchRole = async () => {
+    setIsSwitchingRole(true);
+    try {
+      await signOut();
+      toast({
+        title: t('nav.switchRoleSuccess'),
+        description: t('nav.switchRoleSuccessDesc'),
+      });
+      navigate('/');
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to logout',
+        variant: "destructive",
+      });
+      setIsSwitchingRole(false);
+    }
   };
 
   return (
@@ -154,12 +177,13 @@ const CustomerHome = () => {
         {/* Role Switch Button */}
         <div className="flex justify-center mt-12 mb-8">
           <Button 
-            onClick={() => navigate("/")}
+            onClick={handleSwitchRole}
+            disabled={isSwitchingRole}
             variant="outline"
             size="sm"
             className="border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 hover:scale-105 animate-fade-in"
           >
-            {t('nav.switchRole')}
+            {isSwitchingRole ? t('nav.switchingRole') : t('nav.switchRole')}
           </Button>
         </div>
       </section>
