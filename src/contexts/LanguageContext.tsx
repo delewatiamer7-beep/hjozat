@@ -32,7 +32,8 @@ const translations = {
     'landing.haveAccount': 'لديك حساب بالفعل؟',
     'landing.loginHere': 'سجل دخولك هنا',
     'landing.welcome': 'مرحباً',
-    'landing.back': 'عودة',
+    'landing.returnToOwnerDashboard': 'العودة إلى لوحة تحكم المالك',
+    'landing.returnToBrowsePlaygrounds': 'العودة إلى تصفح الملاعب',
     
     // Auth
     'auth.login': 'تسجيل الدخول',
@@ -257,7 +258,8 @@ const translations = {
     'landing.haveAccount': 'Already have an account?',
     'landing.loginHere': 'Login here',
     'landing.welcome': 'Welcome',
-    'landing.back': 'Back',
+    'landing.returnToOwnerDashboard': 'Return to Owner Dashboard',
+    'landing.returnToBrowsePlaygrounds': 'Return to Browse Playgrounds',
     
     // Auth
     'auth.login': 'Login',
