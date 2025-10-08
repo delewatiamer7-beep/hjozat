@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -108,6 +109,7 @@ const OwnerDashboard = () => {
               <p className="text-muted-foreground">{t('owner.manageFields')}</p>
             </div>
             <div className="flex items-center gap-4">
+              <ThemeToggle />
               <LanguageSwitcher />
               <Button 
                 onClick={handleAddField}

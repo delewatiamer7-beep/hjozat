@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { FieldCard } from "@/components/FieldCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -63,6 +64,7 @@ const CustomerHome = () => {
               </nav>
             </div>
             <div className="flex items-center gap-4">
+              <ThemeToggle />
               <LanguageSwitcher />
             </div>
           </div>

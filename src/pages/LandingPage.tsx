@@ -3,6 +3,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { RoleSelectionCard } from "@/components/RoleSelectionCard";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Home } from "lucide-react";
 import heroImage from "@/assets/hero-football-field.jpg";
@@ -53,7 +54,8 @@ const LandingPage = () => {
               </Tooltip>
             </TooltipProvider>
           )}
-          <div className={!user ? "ml-auto" : ""}>
+          <div className={`flex items-center gap-3 ${!user ? "ml-auto" : ""}`}>
+            <ThemeToggle />
             <LanguageSwitcher />
           </div>
         </div>

@@ -19,6 +19,7 @@ const translations = {
     'nav.dashboard': 'الذهاب إلى لوحة التحكم',
     'nav.logout': 'تسجيل الخروج',
     'nav.backToHome': 'العودة إلى الصفحة الرئيسية',
+    'nav.toggleTheme': 'الوضع الفاتح/الداكن',
     'nav.browseFields': 'تصفح الملاعب',
     'nav.myBookings': 'حجوزاتي',
     
@@ -248,6 +249,7 @@ const translations = {
     'nav.dashboard': 'Go to Dashboard',
     'nav.logout': 'Logout',
     'nav.backToHome': 'Back to Home',
+    'nav.toggleTheme': 'Light/Dark Mode',
     'nav.browseFields': 'Browse Fields',
     'nav.myBookings': 'My Bookings',
     
