@@ -7,24 +7,16 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Calendar } from "@/components/ui/calendar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
-import { CalendarIcon, MapPin, Star } from "lucide-react";
+import { MapPin, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 import { useField } from "@/hooks/useFields";
-import { useCreateBooking } from "@/hooks/useBookings";
+import { useCreateBooking, useFieldBookings } from "@/hooks/useBookings";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
-
-// Available time slots
-const timeSlots = [
-  "06:00", "07:00", "08:00", "09:00", "10:00", "11:00",
-  "12:00", "13:00", "14:00", "15:00", "16:00", "17:00",
-  "18:00", "19:00", "20:00", "21:00", "22:00"
-];
+import { BookingCalendar } from "@/components/BookingCalendar";
 
 const BookingPage = () => {
   const { id } = useParams();
@@ -35,13 +27,12 @@ const BookingPage = () => {
   const [selectedTime, setSelectedTime] = useState("");
   
   const { data: field, isLoading, error } = useField(id || "");
+  const { data: bookedSlots = [], isLoading: bookingsLoading } = useFieldBookings(id || "");
   const createBooking = useCreateBooking();
 
   const bookingSchema = z.object({
     customerName: z.string().trim().min(1, t('booking.customerNameRequired')).max(100, t('booking.customerNameMaxLength')),
     phone: z.string().trim().min(10, t('booking.phoneMinLength')).max(20, t('booking.phoneMaxLength')),
-    date: z.date({ required_error: t('booking.dateRequired') }),
-    time: z.string().min(1, t('booking.timeRequired')),
   });
 
   type BookingFormData = z.infer<typeof bookingSchema>;
@@ -50,16 +41,22 @@ const BookingPage = () => {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
   } = useForm<BookingFormData>({
     resolver: zodResolver(bookingSchema)
   });
 
   const onSubmit = async (data: BookingFormData) => {
-    if (!field || !user) return;
+    if (!field || !user || !selectedDate || !selectedTime) {
+      toast({
+        title: t('toast.validationError'),
+        description: t('booking.dateRequired'),
+        variant: "destructive"
+      });
+      return;
+    }
     
     try {
-      const endTime = new Date(`1970-01-01T${data.time}:00`);
+      const endTime = new Date(`1970-01-01T${selectedTime}:00`);
       endTime.setHours(endTime.getHours() + 1); // 1-hour booking
       
       await createBooking.mutateAsync({
@@ -67,8 +64,8 @@ const BookingPage = () => {
         customer_id: user.id,
         customer_name: data.customerName,
         customer_phone: data.phone,
-        booking_date: format(data.date, 'yyyy-MM-dd'),
-        start_time: data.time,
+        booking_date: format(selectedDate, 'yyyy-MM-dd'),
+        start_time: selectedTime,
         end_time: endTime.toTimeString().slice(0, 5),
         total_amount: field.price_per_booking,
         status: 'pending',
@@ -89,22 +86,15 @@ const BookingPage = () => {
     }
   };
 
-  const handleDateSelect = (date: Date | undefined) => {
+  const handleSlotSelect = (date: Date, time: string) => {
     setSelectedDate(date);
-    if (date) {
-      setValue("date", date);
-    }
-  };
-
-  const handleTimeSelect = (time: string) => {
     setSelectedTime(time);
-    setValue("time", time);
   };
 
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background">
-        <header className="bg-white border-b shadow-sm sticky top-0 z-50">
+        <header className="bg-card border-b shadow-sm sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-6 py-4">
             <div className="flex items-center justify-between">
               <Button 
@@ -118,23 +108,18 @@ const BookingPage = () => {
             </div>
           </div>
         </header>
-        <div className="max-w-4xl mx-auto px-6 py-8">
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="md:col-span-1">
+        <div className="max-w-7xl mx-auto px-6 py-8">
+          <div className="grid lg:grid-cols-4 gap-8">
+            <div className="lg:col-span-1">
               <Card className="sticky top-24 p-6">
                 <Skeleton className="h-40 w-full rounded-lg mb-4" />
                 <Skeleton className="h-6 w-3/4 mb-2" />
                 <Skeleton className="h-4 w-1/2" />
               </Card>
             </div>
-            <div className="md:col-span-2">
-              <Card className="p-8">
-                <Skeleton className="h-8 w-1/2 mb-6" />
-                <div className="space-y-4">
-                  <Skeleton className="h-10 w-full" />
-                  <Skeleton className="h-10 w-full" />
-                </div>
-              </Card>
+            <div className="lg:col-span-3 space-y-6">
+              <Skeleton className="h-[500px] w-full rounded-lg" />
+              <Skeleton className="h-[200px] w-full rounded-lg" />
             </div>
           </div>
         </div>
@@ -156,7 +141,7 @@ const BookingPage = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-white border-b shadow-sm sticky top-0 z-50">
+      <header className="bg-card border-b shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <Button 
@@ -171,10 +156,10 @@ const BookingPage = () => {
         </div>
       </header>
 
-      <div className="max-w-4xl mx-auto px-6 py-8">
-        <div className="grid md:grid-cols-3 gap-8">
-          {/* Field Summary */}
-          <div className="md:col-span-1">
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="grid lg:grid-cols-4 gap-8">
+          {/* Field Summary - Sidebar */}
+          <div className="lg:col-span-1">
             <Card className="sticky top-24">
               <div className="p-6">
                 <img 
@@ -227,19 +212,31 @@ const BookingPage = () => {
             </Card>
           </div>
 
-          {/* Booking Form */}
-          <div className="md:col-span-2">
+          {/* Main Content */}
+          <div className="lg:col-span-3 space-y-6">
+            {/* Calendar */}
+            {bookingsLoading ? (
+              <Skeleton className="h-[500px] w-full rounded-lg" />
+            ) : (
+              <BookingCalendar
+                fieldId={id || ""}
+                bookedSlots={bookedSlots}
+                onSlotSelect={handleSlotSelect}
+                selectedDate={selectedDate}
+                selectedTime={selectedTime}
+              />
+            )}
+
+            {/* Booking Form */}
             <Card className="p-8">
-              <div className="mb-8">
-                <h2 className="text-3xl font-bold mb-2">{t('booking.complete')}</h2>
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold mb-2">{t('booking.complete')}</h2>
                 <p className="text-muted-foreground">{t('booking.fillDetails')}</p>
               </div>
 
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 {/* Customer Information */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold">{t('booking.contactInfo')}</h3>
-                  
+                <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="customerName">{t('booking.fullName')} *</Label>
                     <Input
@@ -268,77 +265,12 @@ const BookingPage = () => {
                   </div>
                 </div>
 
-                {/* Date & Time Selection */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold">{t('booking.selectDateTime')}</h3>
-                  
-                  <div className="grid md:grid-cols-2 gap-4">
-                    {/* Date Picker */}
-                    <div>
-                      <Label>{t('booking.date')} *</Label>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              "w-full justify-start text-right font-normal",
-                              !selectedDate && "text-muted-foreground",
-                              errors.date && "border-destructive"
-                            )}
-                          >
-                            <CalendarIcon className="ml-2 h-4 w-4" />
-                            {selectedDate ? format(selectedDate, "PPP") : t('booking.selectDate')}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={selectedDate}
-                            onSelect={handleDateSelect}
-                            disabled={(date) => date < new Date()}
-                            className={cn("p-3 pointer-events-auto")}
-                            initialFocus
-                          />
-                        </PopoverContent>
-                      </Popover>
-                      {errors.date && (
-                        <p className="text-sm text-destructive mt-1">{errors.date.message}</p>
-                      )}
-                    </div>
-
-                    {/* Time Selection */}
-                    <div>
-                      <Label>{t('booking.time')} *</Label>
-                      <div className="grid grid-cols-3 gap-2 mt-2 max-h-40 overflow-y-auto border rounded-lg p-2">
-                        {timeSlots.map((time) => (
-                          <Button
-                            key={time}
-                            type="button"
-                            variant={selectedTime === time ? "default" : "outline"}
-                            size="sm"
-                            onClick={() => handleTimeSelect(time)}
-                            className={cn(
-                              "text-xs",
-                              selectedTime === time && "bg-primary text-primary-foreground"
-                            )}
-                          >
-                            {time}
-                          </Button>
-                        ))}
-                      </div>
-                      {errors.time && (
-                        <p className="text-sm text-destructive mt-1">{errors.time.message}</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
                 {/* Submit Button */}
-                <div className="pt-6 border-t">
+                <div className="pt-4 border-t">
                   <Button 
                     type="submit" 
                     size="lg"
-                    disabled={createBooking.isPending}
+                    disabled={createBooking.isPending || !selectedDate || !selectedTime}
                     className="w-full bg-primary hover:bg-primary-glow text-primary-foreground font-semibold"
                   >
                     {createBooking.isPending ? (
@@ -350,6 +282,12 @@ const BookingPage = () => {
                       t('booking.confirm')
                     )}
                   </Button>
+                  
+                  {(!selectedDate || !selectedTime) && (
+                    <p className="text-sm text-muted-foreground text-center mt-2">
+                      {t('booking.selectDateTime')}
+                    </p>
+                  )}
                   
                   <p className="text-sm text-muted-foreground text-center mt-4">
                     {t('booking.pendingNote')}
