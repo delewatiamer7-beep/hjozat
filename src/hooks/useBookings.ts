@@ -57,6 +57,27 @@ export const useUserBookings = (userId: string) => {
   });
 };
 
+export const useFieldBookings = (fieldId: string) => {
+  return useQuery({
+    queryKey: ['field-bookings', fieldId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('bookings')
+        .select('booking_date, start_time, status')
+        .eq('field_id', fieldId)
+        .in('status', ['pending', 'confirmed']);
+
+      if (error) throw error;
+      return data.map(booking => ({
+        date: booking.booking_date,
+        start_time: booking.start_time,
+        status: booking.status || 'pending'
+      }));
+    },
+    enabled: !!fieldId,
+  });
+};
+
 export const useCreateBooking = () => {
   const queryClient = useQueryClient();
   
@@ -75,6 +96,7 @@ export const useCreateBooking = () => {
       queryClient.invalidateQueries({ queryKey: ['bookings'] });
       queryClient.invalidateQueries({ queryKey: ['owner-bookings'] });
       queryClient.invalidateQueries({ queryKey: ['user-bookings'] });
+      queryClient.invalidateQueries({ queryKey: ['field-bookings'] });
     },
   });
 };
@@ -98,6 +120,7 @@ export const useUpdateBookingStatus = () => {
       queryClient.invalidateQueries({ queryKey: ['bookings'] });
       queryClient.invalidateQueries({ queryKey: ['owner-bookings'] });
       queryClient.invalidateQueries({ queryKey: ['user-bookings'] });
+      queryClient.invalidateQueries({ queryKey: ['field-bookings'] });
     },
   });
 };

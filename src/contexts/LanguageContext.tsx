@@ -179,6 +179,16 @@ const translations = {
     'field.all': 'الكل',
     'field.pending': 'قيد الانتظار',
     
+    // Calendar
+    'calendar.title': 'تقويم الحجوزات',
+    'calendar.available': 'متاح',
+    'calendar.booked': 'محجوز',
+    'calendar.pending': 'قيد الانتظار',
+    'calendar.selected': 'المحدد',
+    'calendar.selectedSlot': 'الموعد المحدد',
+    'calendar.past': 'موعد سابق',
+    'calendar.clickToBook': 'انقر للحجز',
+    
     // Booking
     'booking.title': 'احجز ملعبك',
     'booking.customerName': 'اسم العميل',
@@ -408,6 +418,16 @@ const translations = {
     'field.recentBookings': 'Recent Bookings',
     'field.all': 'All',
     'field.pending': 'Pending',
+    
+    // Calendar
+    'calendar.title': 'Booking Calendar',
+    'calendar.available': 'Available',
+    'calendar.booked': 'Booked',
+    'calendar.pending': 'Pending',
+    'calendar.selected': 'Selected',
+    'calendar.selectedSlot': 'Selected Slot',
+    'calendar.past': 'Past slot',
+    'calendar.clickToBook': 'Click to book',
     
     // Booking
     'booking.title': 'Book Your Field',
